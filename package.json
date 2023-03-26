@@ -2,10 +2,12 @@
   "name": "pixitfixit",
   "version": "1.0.0",
   "description": "Find potholes in your area before you drive. This site is user operated as users will upload pictures/locations of potholes that will be pinned on a map for all to see.",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon apps.js",
+    "start": "node apps.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run views\"",
+    "views": "cd views && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
