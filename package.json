@@ -1,0 +1,23 @@
+{
+  "name": "pixitfixit",
+  "version": "1.0.0",
+  "description": "Find potholes in your area before you drive. This site is user operated as users will upload pictures/locations of potholes that will be pinned on a map for all to see.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon apps.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "authors": [
+    "Michael Klein",
+    "Stephen Heredia",
+    "David Ogbonna",
+    "Tommy Dascoli",
+    "George Ayob"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
