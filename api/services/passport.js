@@ -1,6 +1,4 @@
 // TODO: Clean up and make work for our schema
-
-
 const passport = require("passport");
 const User = require("../models/user");
 const config = require("../../config");

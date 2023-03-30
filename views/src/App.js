@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import mapboxgl from "mapbox-gl";
 import { useState, useRef, useEffect } from 'react'
@@ -7,7 +6,6 @@ mapboxgl.accessToken = env.MAPBOX_TOKEN;
 
 
 function App() {
-  console.log('I AM THE ENVVVV', env)
   
   const mapContainer = useRef(null);
   const map = useRef(null);
