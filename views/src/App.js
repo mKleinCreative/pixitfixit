@@ -27,7 +27,7 @@ function App() {
       <header className="App-header">
         <div ref={mapContainer} className="map-container" />
         <p>
-          Pixitfixit!
+          Pixitfixit!!!!
         </p>
         <a
           className="App-link"
