@@ -1,5 +1,5 @@
 import { user } from "../_db/collection.js";
-
+import bcrypt from "bcryptjs/dist/bcrypt.js";
 const createUser = async (
   firstName,
   LastName,
@@ -12,12 +12,16 @@ const createUser = async (
   username,
   Age
 ) => {
+
+    const passwordHash = await bcrypt.hash(password, 10)
+// console.log(passwordHash)
+
   let newUser = {
     firstName: firstName,
     LastName: LastName,
     Email: Email,
     address: address,
-    password: password,
+    password: passwordHash,
     Role: Role,
     comment: comment,
     potholes: potholes,
