@@ -1,11 +1,11 @@
-import { dbConnection } from "./connect.js";
+import connect from "./connect.js";
 
 const getCollectionFn = (collection) => {
   let _col = undefined;
 
   return async () => {
     if (!_col) {
-      const db = await dbConnection();
+      const db = await connect.dbConnection();
       _col = await db.collection(collection);
     }
 
@@ -17,4 +17,3 @@ const getCollectionFn = (collection) => {
 // export const posts = getCollectionFn('posts');
 export const users = getCollectionFn("users");
 export const pothole = getCollectionFn("pothole");
-export const comment = getCollectionFn("comment");

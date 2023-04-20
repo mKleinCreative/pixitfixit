@@ -1,4 +1,4 @@
-import { user } from "../_db/collection.js";
+import { users } from "../db/collections.js";
 import bcrypt from "bcryptjs/dist/bcrypt.js";
 const createUser = async (
   firstName,
@@ -7,15 +7,16 @@ const createUser = async (
   address,
   password,
   Role,
-  comment,
-  potholes,
+  //   comment,
+  //   potholes,
   username,
-  Age
+  Birthday
 ) => {
-
-    const passwordHash = await bcrypt.hash(password, 10)
-// console.log(passwordHash)
-
+  const passwordHash = await bcrypt.hash(password, 10);
+  // console.log(passwordHash)
+  // error
+  let pothole = [];
+  // should i make another variable that holds an empty array.
   let newUser = {
     firstName: firstName,
     LastName: LastName,
@@ -23,13 +24,13 @@ const createUser = async (
     address: address,
     password: passwordHash,
     Role: Role,
-    comment: comment,
-    potholes: potholes,
+    // comment: comment,
+    // potholes: potholes,
     username: username,
-    Age: Age,
+    Birthday: Birthday,
   };
 
-  const usercollection = await user();
+  const usercollection = await users();
   const insertedUser = await usercollection.insertOne(newUser);
 
   if (insertedUser.acknowledged === true) {

@@ -1,32 +1,32 @@
-import { pothole } from "../_db/collection.js";
 
 const createPothole = async (
-    User_id,
-    status,
-    photo_url,
-    Lat,
-    Long,
-    comment
-  ) => {
-    let newcomment = {
-      User_id: User_id,
-      status: status,
-      photo_url:  photo_url,
-      Lat: Lat,
-      Long: Long,
-      Role: Role,
-      comment: [{User_id,
-                comment}]
-    };
-  
-    const poteHolecollection = await pothole();
-    const insertedPotHole = await poteHolecollection.insertOne(newcomment);
-  
-    if (insertedPotHole.acknowledged === true) {
-      console.log(newcomment);
-      return newcomment;
-    } else {
-      throw "this did not work!";
-    }
+  users_id,
+  status,
+  photo_url,
+  Lat,
+  Long,
+  comment
+) => {
+    // check to see of if the user_id is present in DB!!! --> low priotiry! 
+
+  let newPothole = {
+    users_id: users_id,
+    status: status,
+    photo_url: photo_url,
+    Lat: Lat,
+    Long: Long,
+    Role: Role,
+    comment: comment,
   };
-  export default createPothole;
+
+  const poteHolecollection = await pothole();
+  const insertedPotHole = await poteHolecollection.insertOne(newPothole);
+
+  if (insertedPotHole.acknowledged === true) {
+    console.log(newPothole);
+    return newPothole;
+  } else {
+    throw "this did not work!";
+  }
+};
+export default createPothole;

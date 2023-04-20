@@ -1,13 +1,16 @@
-const MongoClient = require("mongodb").MongoClient;
-const { dbAccessString } = require("../../config/keys.js");
-
+import { MongoClient } from "mongodb";
+import dbAccessString from "../../config/keys.js";
 let _connection = undefined;
 let _db = undefined;
 
-module.exports = {
+export default {
   dbConnection: async () => {
     if (!_connection) {
-      _connection = await MongoClient.connect(dbAccessString);
+      const client = new MongoClient(
+        "mongodb+srv://dbAdmin:VwaA6T0PBbsM3OcY@pixitfixit.tsqeaxx.mongodb.net/?retryWrites=true&w=majorityssString"
+      );
+
+      _connection = await client.connect();
       _db = await _connection.db(pixitfixit);
     }
 
