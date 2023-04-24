@@ -1,49 +1,51 @@
 import './App.css';
 import mapboxgl from "mapbox-gl";
-import Map, { Marker } from "react-map-gl";
-import { useState, useRef, useEffect } from 'react'
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
+import Map, { 
+  Marker, 
+  GeolocateControl, 
+  FullscreenControl, 
+  ScaleControl,
+  useControl
+ } from "react-map-gl";
+import { useState, useRef, useEffect, useCallback } from 'react'
 import env from "react-dotenv";
 import { Grid, Box } from '@mui/material'
 
 function App() {
   
-  // const mapContainer = useRef(null);
-  // const map = useRef(null);
-  // const [lng, setLng] = useState(30.5);
-  // const [lat, setLat] = useState(50.5);
-  // const [zoom, setZoom] = useState(9);
+  const mapRef = useRef();
 
-  // useEffect(() => {
-  //   if (map.current) return; // initialize map only once
-  //   map.current = new mapboxgl.Map({
-  //     container: mapContainer.current,
-  //     style: "mapbox://styles/mapbox/streets-v12",
-  //     center: [lng, lat],
-  //     zoom: zoom,
-  //   });
-  // });
+  const [lng, setLng] = useState(30.5);
+  const [lat, setLat] = useState(50.5);
+  const [zoom, setZoom] = useState(9);
 
-  // map.on('click', (e) => {
-    
-  // })
+  const onMapDblClick = useCallback(() => {
+    mapRef.current.on('click', (e) => {
+      console.log(e.lngLat.lng);
+      // Create a new marker.
+      return (
+        <Marker
+          draggable={true}
+          longitude={e.lngLat.lng}
+          latitude={e.lngLat.lat}
+        >
+          <img src="/imgs/mapbox-marker-icon-20px-gray.png" />
+        </Marker>
+      
+      );
+    })
+  }, [])
 
-  // useEffect((e) => {
-  //   const potholes = map.queryRenderedFeatures(e.point, {
-  //     layers: ["POTHOLES"],
-  //   });
-  //   if (!potholes.length) {
-  //     return;
-  //   }
-  //   const pothole = potholes[0];
 
-  //   const popup = new mapboxgl.Popup({ offset: [0, -15] })
-  //     .setLngLat(pothole.geometry.coordinates)
-  //     .setHTML(
-  //       `<h3>${pothole.properties.title}</h3><p>${pothole.properties.description}</p>`
-  //     )
-  //     .addTo(map);
-  // },[map])
+  function DrawControl(props) {
+    console.log('props ',props)
+    useControl(() => new MapboxDraw(props), {
+      position: props.position,
+    });
 
+    return null;
+  }
 
   return (
     <Box
@@ -51,7 +53,7 @@ function App() {
         height: "1000px",
       }}
     >
-      <Grid container spacing={2} gridTemplateColumns="repeat(12, 1fr)" xs={12}>
+      <Grid container spacing={2} gridTemplateColumns="repeat(12, 1fr)">
         <Grid item xs={12} md={8} lg={10}>
           <Map
             item
@@ -61,12 +63,25 @@ function App() {
               zoom: 3.5,
             }}
             style={{ width: "100vw", height: "100vh" }}
-            mapStyle="mapbox://styles/mapbox/streets-v9"
+            mapStyle="mapbox://styles/mapbox/streets-v11"
             mapboxAccessToken={env.MAPBOX_TOKEN}
+            ref={mapRef}
+            onClick={onMapDblClick}
           >
-            <Marker longitude={-100} latitude={40} anchor="bottom">
+            <Marker longitude={30.5} latitude={50.5} anchor="bottom">
               <img src="/imgs/mapbox-marker-icon-20px-gray.png" />
             </Marker>
+            <GeolocateControl />
+            <FullscreenControl />
+            <ScaleControl />
+            <DrawControl
+              position="top-left"
+              displayControlsDefault={false}
+              controls={{
+                polygon: true,
+                trash: true,
+              }}
+            />
           </Map>
         </Grid>
       </Grid>
