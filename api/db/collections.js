@@ -17,3 +17,4 @@ const getCollectionFn = (collection) => {
 // export const posts = getCollectionFn('posts');
 export const users = getCollectionFn("users");
 export const pothole = getCollectionFn("pothole");
+export const comment = getCollectionFn("comments");

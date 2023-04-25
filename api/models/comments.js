@@ -1,11 +1,11 @@
 const createComment = async (
-  User_id,
+  user_id,
   Pothole_id,
   Message
   // photo_url
 ) => {
   let newcomment = {
-    User_id: User_id,
+    user_id: user_id,
     Pothole_id: Pothole_id,
     Message: Message,
   };

@@ -5,11 +5,15 @@ import createUser from "./users.js";
   await createUser(
     "Jerell",
     "Mendoza",
-    " 21 Easlakjflskfj",
-    "jim123@gmail.com",
-    "jim@1234",
-    "friend",
-    "Jerell123",
+    "Jerell@gpmail.ord",
+    "08901",
+    "P@ssw0rd",
+    "Admin",
+    "6441e1ed23c3324645e81114",
+    "6441e1ed23c3324645e81114",
+    "true",
+    "6441e1ed23c3324645e81114",
+    "Jerell123456",
     "05/01/1999"
   );
 })();
