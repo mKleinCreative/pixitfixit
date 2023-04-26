@@ -1,5 +1,12 @@
+import * as production from "./prod.js";
+import * as development from "./dev.js";
+
+let accessString;
+
 if (process.env.NODE_ENV === "production") {
-  module.exports = require("./prod");
+  accessString = production;
 } else {
-  module.exports = require("./dev");
+  accessString = development;
 }
+
+export default accessString;
