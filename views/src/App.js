@@ -12,6 +12,7 @@ import InteractiveMap, {
 import { useState, useRef, useEffect, useCallback } from 'react'
 import env from "react-dotenv";
 import { Grid, Box, Modal } from '@mui/material'
+import Navbar from './helpers/Navbar.js';
 
 function App() {
 
@@ -33,6 +34,8 @@ function App() {
   }
 
   return (
+    <>
+    <Navbar sx={{backgroundColor: "blue", width: "100%"}}/>
     <Box
       sx={{
         height: "1000px",
@@ -76,6 +79,8 @@ function App() {
         </Grid>
       </Grid>
     </Box>
+  
+  </>
   );
 }
 
