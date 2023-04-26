@@ -1,6 +1,5 @@
-const mongoCollections = require('../config/mongoCollections');
-import { users } from "../db/collections.js";
 
+const mongoCollections = require("../config/mongoCollections");
 const userCollection = mongoCollections.user_collection;
 const saltRounds = 10;
 
