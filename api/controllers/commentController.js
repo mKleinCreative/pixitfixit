@@ -47,15 +47,15 @@ const GetAllPotholeComments = async (pothole_id) => {
       .find({}, { projection: { comments: 1 } })
       .toArray();
 
-    if (!allPotholes) {
-      throw new Error("Failed to retrieve pothole comments");
-    }
+    if (!allPotholes) throw "there are no comments for this pothole!";
 
-    const allComments = allPotholes.map((pothole) => pothole.comments).flat();
+    const allPotholeComments = allPotholes
+      .map((pothole) => pothole.comments)
+      .flat();
 
-    return allComments;
+    return allPotholeComments;
   } catch (error) {
-    throw new Error("Error retrieving pothole comments");
+    throw "Not able to retreieve pothole comment!";
   }
   // where am I placing the comments? are they going to the user table? are we just going to display the whole thing?
 };

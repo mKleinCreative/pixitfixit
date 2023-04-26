@@ -1,4 +1,5 @@
 const mongoCollections = require('../config/mongoCollections');
+import { users } from "../db/collections.js";
 const userCollection = mongoCollections.user_collection;
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
