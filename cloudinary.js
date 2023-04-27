@@ -37,3 +37,20 @@ module.exports = cloudinary;
 // // The output url
 // console.log(url);
 // // https://res.cloudinary.com/<cloud_name>/image/upload/h_150,w_100/olympic_flag
+
+// async function uploadImage() {
+//   const fileInput = document.getElementById('file-input');
+//   const file = fileInput.files[0];
+
+//   const formData = new FormData();
+//   formData.append('file', file);
+//   formData.append('upload_preset', 'your_upload_preset'); // You can create an upload preset in your Cloudinary dashboard
+
+//   const response = await fetch('https://api.cloudinary.com/v1_1/your_cloud_name/image/upload', {
+//     method: 'POST',
+//     body: formData,
+//   });
+
+//   const data = await response.json();
+//   displayImage(data.secure_url);
+// }
