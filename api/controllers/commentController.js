@@ -10,11 +10,11 @@ const CreateComment = async (user_id, pothole_id, message, PhotoUrL) => {
   if (message.length < 3) throw "This message is too short";
   if (!PhotoUrL || typeof PhotoUrL !== "string") throw "Invalid Photo";
 
-  let userDbCheck = await userCollection.exists({ _id: user_id });
+  let userDbCheck = await users.exists({ _id: user_id });
 
   if (userDbCheck == false) throw "this user does not exist!";
 
-  let potholeDbCheck = await poteHolecollection.exists({ _id: pothole_id });
+  let potholeDbCheck = await pothole.exists({ _id: pothole_id });
 
   if (potholeDbCheck == false) throw "This pothole does not exist!!";
 
