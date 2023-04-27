@@ -69,6 +69,7 @@ function App() {
                         <MarkerDialog
                           open={handleShowPopup}
                           onClose={handleShowPopup}
+                          comments={['hi', `${i}`, `${Math.random()}`]}
                         />
                       )}
                     </Marker>
