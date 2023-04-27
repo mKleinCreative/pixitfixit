@@ -1,7 +1,6 @@
-const mongoCollections = require("../config/mongoCollections");
-const commentcollection = mongoCollections.comment_collections;
-const poteHolecollection = mongoCollections.poteHolecollection;
-const userCollection = mongoCollections.user_collection;
+import { comment } from "../db/collections";
+import { users } from "../db/collections";
+import { pothole } from "../db/collections";
 const { ObjectId } = require("mongodb");
 
 const CreateComment = async (user_id, pothole_id, message, PhotoUrL) => {
@@ -21,14 +20,36 @@ const CreateComment = async (user_id, pothole_id, message, PhotoUrL) => {
 
   // insert the comment into the array of comments in the Pothole!
 
-  const comments = await commentcollection();
+  const commentCollection = await comment();
+
   const newComment = {
     user_id: user_id,
     message: message,
     PhotoUrL: PhotoUrL,
   };
-  const insertedComment = await comments.insertOne(newComment);
-  if (insertedComment.acknowledged === true) {
+
+  const insertedComment = await commentCollection.insertOne(newComment);
+
+  const commentId = insertedComment.insertedId;
+
+  const usercollections = await users();
+  const potHoleCollections = await pothole();
+
+  const useridCollection = usercollections.updateOne(
+    { _id: user_id },
+    { $push: { comment: commentId } }
+  );
+
+  const potholeidCollection = potHoleCollections.updateOne(
+    { _id: pothole_id },
+    { $push: { comments: commentId } }
+  );
+
+  if (
+    insertedComment.acknowledged === true &&
+    useridCollection.acknowledged === true &&
+    potholeidCollection.acknowledged == true
+  ) {
     console.log(newComment);
     return newComment;
   } else {
@@ -57,7 +78,6 @@ const GetAllPotholeComments = async (pothole_id) => {
   } catch (error) {
     throw "Not able to retreieve pothole comment!";
   }
-  // where am I placing the comments? are they going to the user table? are we just going to display the whole thing?
 };
 const GetAllCommentsByUser = async (user_id) => {
   //find all comments by user id
@@ -67,16 +87,39 @@ const GetAllCommentsByUser = async (user_id) => {
     { user_id: user_id },
     { projection: { _id: 1, user_id: 1, message: 1, PhotoUrL: 1 } }
   );
-  if (findUserComment.length == 0) throw `${user_id} has no comments`;
+  if (findUserComment.acknowledged === false)
+    throw `${user_id} has no comments`;
 };
 
-const DeleteComment = async (comment_id) => {
+const DeleteComment = async (comment_id, user_id) => {
   // by comment id
+  // need to also delete comment_ids from pothole collection and also user collection
+
   if (!comment_id || typeof comment_id != "string")
     throw "This is not a valid commentid!";
+
+  const commentcollection = await comment();
+  const userCollection = await users();
+  const poteHolecollection = await pothole();
+
+  const commentid = await userCollection.updateOne(
+    { _id: user_id },
+    { $pull: { comment: comment_id } }
+  );
+
+  const potholeid = await poteHolecollection.updateOne(
+    { _id: user_id },
+    { $pull: { comments: comment_id } }
+  );
+
   const deletedComment = await commentcollection.deleteOne({ _id: comment_id });
 
-  if (deletedComment.length == 0) throw `${comment_id} was not deleted`;
+  if (
+    deletedComment.acknowledged === false &&
+    potholeid.acknowledged === false &&
+    commentid.acknowledged === false
+  )
+    throw `${comment_id} was not deleted`;
 };
 
 module.exports = {
