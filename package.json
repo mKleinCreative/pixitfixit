@@ -5,7 +5,7 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node apps.js",
+    "start": "node app.js",
     "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run views\"",
     "views": "cd views && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
