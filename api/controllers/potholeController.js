@@ -1,5 +1,6 @@
-const mongoCollections = require('../config/mongoCollections');
-const potholesCollection = mongoCollections.potholes;
+import { comment } from "../db/collections";
+import { users } from "../db/collections";
+import { pothole } from "../db/collections";
 const { ObjectId } = require('mongodb');
 
 const CreatePotHole = async (

@@ -10,11 +10,15 @@ const CreateComment = async (user_id, pothole_id, message, PhotoUrL) => {
   if (message.length < 3) throw "This message is too short";
   if (!PhotoUrL || typeof PhotoUrL !== "string") throw "Invalid Photo";
 
-  let userDbCheck = await users.exists({ _id: user_id });
+  const parsedId = ObjectId(user_id);
+
+  const parsedPotholeID = ObjectId(pothole_id);
+
+  let userDbCheck = await users.exists({ _id: parsedId });
 
   if (userDbCheck == false) throw "this user does not exist!";
 
-  let potholeDbCheck = await pothole.exists({ _id: pothole_id });
+  let potholeDbCheck = await pothole.exists({ _id: parsedPotholeID });
 
   if (potholeDbCheck == false) throw "This pothole does not exist!!";
 
@@ -23,7 +27,7 @@ const CreateComment = async (user_id, pothole_id, message, PhotoUrL) => {
   const commentCollection = await comment();
 
   const newComment = {
-    user_id: user_id,
+    user_id: parsedId,
     message: message,
     PhotoUrL: PhotoUrL,
   };
@@ -36,12 +40,12 @@ const CreateComment = async (user_id, pothole_id, message, PhotoUrL) => {
   const potHoleCollections = await pothole();
 
   const useridCollection = usercollections.updateOne(
-    { _id: user_id },
+    { _id: parsedId },
     { $push: { comment: commentId } }
   );
 
   const potholeidCollection = potHoleCollections.updateOne(
-    { _id: pothole_id },
+    { _id: parsedPotholeID },
     { $push: { comments: commentId } }
   );
 
@@ -60,6 +64,8 @@ const CreateComment = async (user_id, pothole_id, message, PhotoUrL) => {
 const GetAllPotholeComments = async (pothole_id) => {
   if (!pothole_id || typeof pothole_id !== "string")
     throw "this is not a valid potholeId!";
+
+  const parsedPotholeID = ObjectId(pothole_id);
 
   const potholes = await poteHolecollection();
 
@@ -83,12 +89,15 @@ const GetAllCommentsByUser = async (user_id) => {
   //find all comments by user id
   if (!user_id || typeof user_id !== "string") throw "this user is invalid";
 
+  const commentcollection = await comment();
+  const parsedCommentID = ObjectId(user_id);
+
   const findUserComment = await commentcollection.find(
-    { user_id: user_id },
+    { user_id: parsedCommentID },
     { projection: { _id: 1, user_id: 1, message: 1, PhotoUrL: 1 } }
   );
   if (findUserComment.acknowledged === false)
-    throw `${user_id} has no comments`;
+    throw `${parsedCommentID} has no comments`;
 };
 
 const DeleteComment = async (comment_id, user_id) => {
@@ -102,24 +111,29 @@ const DeleteComment = async (comment_id, user_id) => {
   const userCollection = await users();
   const poteHolecollection = await pothole();
 
+  const parsedUserid = ObjectId(user_id);
+  const parsedCommentid = ObjectId(comment_id);
+
   const commentid = await userCollection.updateOne(
-    { _id: user_id },
-    { $pull: { comment: comment_id } }
+    { _id: parsedUserid },
+    { $pull: { comment: parsedCommentid } }
   );
 
   const potholeid = await poteHolecollection.updateOne(
-    { _id: user_id },
-    { $pull: { comments: comment_id } }
+    { _id: parsedUserid },
+    { $pull: { comments: parsedCommentid } }
   );
 
-  const deletedComment = await commentcollection.deleteOne({ _id: comment_id });
+  const deletedComment = await commentcollection.deleteOne({
+    _id: parsedCommentid,
+  });
 
   if (
     deletedComment.acknowledged === false &&
     potholeid.acknowledged === false &&
     commentid.acknowledged === false
   )
-    throw `${comment_id} was not deleted`;
+    throw `${parsedCommentid} was not deleted`;
 };
 
 module.exports = {
