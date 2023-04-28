@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {Button, ButtonGroup, Drawer, Modal, Box, TextField} from "@mui/material"
 import { display } from "@mui/system";
+import axios from 'axios'
 
 export default function Navbar() {
 
@@ -11,8 +12,9 @@ export default function Navbar() {
 
 
  const removeUser = (id) => {
-    //TODO axios call here
-    console.log(id)
+    axios.post("/users/delete", {
+        _id: id
+    })
  }
 
 
