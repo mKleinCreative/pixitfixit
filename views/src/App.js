@@ -13,7 +13,6 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import env from "react-dotenv";
 import { Grid, Box, Modal } from '@mui/material'
 import Navbar from './helpers/Navbar.js';
-import MarkerDialog from './components/MarkerDialog.js'
 
 function App() {
 
@@ -36,53 +35,52 @@ function App() {
 
   return (
     <>
-      
-      <Box
-        sx={{
-          height: "1000px",
-        }}
-      >
-        
-        <Grid container spacing={2} gridTemplateColumns="repeat(12, 1fr)">
-          <Grid item xs={12} md={8} lg={10}>
-          
-            <InteractiveMap
-              item
-              doubleClickZoom={false}
-              initialViewState={{
-                longitude: -100,
-                latitude: 40,
-                zoom: 3.5,
-              }}
-              style={{ width: "100vw", height: "100vh" }}
-              mapStyle="mapbox://styles/mapbox/streets-v11"
-              mapboxAccessToken={env.MAPBOX_TOKEN}
-              onDblClick={handleNewMarker}
-            >
-              <Navbar sx={{ backgroundColor: "blue", width: "100%" }} />
-              <GeolocateControl />
-              <FullscreenControl />
-              <ScaleControl />
-              {markers.length
-                ? markers.map((m, i) => (
-                    // <Marker /> just places its children at the right lat lng.
-                    <Marker {...m} key={i} onClick={handleShowPopup}>
-                      <img src="imgs/mapbox-marker-icon-20px-gray.png" />
-                      {showPopup && (
-                        <MarkerDialog
-                          open={handleShowPopup}
-                          onClose={handleShowPopup}
-                          comments={['hi', `${i}`, `${Math.random()}`]}
-                        />
-                      )}
-                    </Marker>
-                  ))
-                : null}
-            </InteractiveMap>
-          </Grid>
+    <Navbar sx={{backgroundColor: "blue", width: "100%"}}/>
+    <Box
+      sx={{
+        height: "1000px",
+      }}
+    >
+      <Grid container spacing={2} gridTemplateColumns="repeat(12, 1fr)">
+        <Grid item xs={12} md={8} lg={10}>
+          <InteractiveMap
+            item
+            doubleClickZoom={false}
+            initialViewState={{
+              longitude: -100,
+              latitude: 40,
+              zoom: 3.5,
+            }}
+            style={{ width: "100vw", height: "100vh" }}
+            mapStyle="mapbox://styles/mapbox/streets-v11"
+            mapboxAccessToken={env.MAPBOX_TOKEN}
+            onDblClick={handleNewMarker}
+          >
+            <GeolocateControl />
+            <FullscreenControl />
+            <ScaleControl />
+            {markers.length
+              ? markers.map((m, i) => (
+                  // <Marker /> just places its children at the right lat lng.
+                  <Marker {...m} key={i} onClick={handleShowPopup}>
+
+                    <img src="imgs/mapbox-marker-icon-20px-gray.png" />
+                    {showPopup && (
+                      <Modal
+                        onClose={() => setShowPopup(false)}
+                      >
+                        You are here
+                      </Modal>
+                    )}
+                  </Marker>
+                ))
+              : null}
+          </InteractiveMap>
         </Grid>
-      </Box>
-    </>
+      </Grid>
+    </Box>
+  
+  </>
   );
 }
 
