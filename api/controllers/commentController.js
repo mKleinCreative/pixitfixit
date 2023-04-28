@@ -13,6 +13,9 @@ const CreateComment = async (user_id, pothole_id, message, PhotoUrL) => {
   const parsedId = ObjectId(user_id);
 
   const parsedPotholeID = ObjectId(pothole_id);
+  const commentCollection = await comment();
+  const usercollections = await users();
+  const potHoleCollections = await pothole();
 
   let userDbCheck = await users.exists({ _id: parsedId });
 
@@ -24,8 +27,6 @@ const CreateComment = async (user_id, pothole_id, message, PhotoUrL) => {
 
   // insert the comment into the array of comments in the Pothole!
 
-  const commentCollection = await comment();
-
   const newComment = {
     user_id: parsedId,
     message: message,
@@ -35,9 +36,6 @@ const CreateComment = async (user_id, pothole_id, message, PhotoUrL) => {
   const insertedComment = await commentCollection.insertOne(newComment);
 
   const commentId = insertedComment.insertedId;
-
-  const usercollections = await users();
-  const potHoleCollections = await pothole();
 
   const useridCollection = usercollections.updateOne(
     { _id: parsedId },

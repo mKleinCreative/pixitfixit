@@ -1,6 +1,5 @@
 
-const mongoCollections = require("../config/mongoCollections");
-const userCollection = mongoCollections.user_collection;
+import { users } from "../db/collections.js";
 const saltRounds = 10;
 
 const usernameRegex = /^[a-zA-Z0-9]{4,}$/;
@@ -20,7 +19,6 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * @param {Array} potholesCreated - The potholes created by the user.
  * @param {string} username - The user's username.
  * @param {Date} birthday - The user's birthday.
- * @returns {Promise<Object>} A promise that resolves with an object indicating successful user creation.
  * @throws {Error} If there is an issue with the input or user creation fails.
  */
 const createUser = async (
@@ -47,7 +45,7 @@ const createUser = async (
   }
 
   // Check for existing user
-  const usersCollection = await userCollection();
+  const usersCollection = await users;
   const userExists = await usersCollection.findOne({ email: email.toLowerCase() });
 
   if (userExists) {
@@ -86,7 +84,6 @@ const createUser = async (
  *
  * @param {string} email - The user's email address.
  * @param {string} password - The user's password.
- * @returns {Promise<Object>} A promise that resolves with an object indicating successful user authentication.
  * @throws {Error} If the email or password is invalid.
  */
 const checkUser = async (email, password) => {
@@ -99,7 +96,7 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   }
   
   // Find user in database
-  const usersCollection = await userCollection();
+  const usersCollection = await users;
   const user = await usersCollection.findOne({ email: email.toLowerCase() });
   
   // Validate user
@@ -121,14 +118,13 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   
   Find a user by their email address.
   @param {string} email - The user's email address.
-  @returns {Promise<Object>} A promise that resolves with the found user object or null if the user is not found.
   @throws {Error} If the email is invalid.
   */
   const findUser = async (email) => {
   if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   throw new Error('Email must be a valid email address');
   }
-  const usersCollection = await userCollection();
+  const usersCollection = await users;
   return await usersCollection.findOne({ email: email.toLowerCase() });
   };
   
@@ -137,7 +133,6 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   Change the permissions (role) of a user.
   @param {string} email - The user's email address.
   @param {string} role - The new role for the user.
-  @returns {Promise<Object>} A promise that resolves with the result of the update operation.
   @throws {Error} If the user is not found.
   */
   const changePermissions = async (email, role) => {
@@ -146,7 +141,7 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   throw new Error('User not found');
   }
   
-  const usersCollection = await userCollection();
+  const usersCollection = await users;
   return await usersCollection.updateOne({ _id: user._id },
   { $set: { role } });
   };
@@ -155,7 +150,6 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   
   Restrict a user's access.
   @param {string} email - The user's email address.
-  @returns {Promise<Object>} A promise that resolves with the result of the update operation.
   @throws {Error} If the user is not found.
   */
   const restrictUser = async (email) => {
@@ -164,7 +158,7 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   throw new Error('User not found');
   }
   
-  const usersCollection = await userCollection();
+  const usersCollection = await users;
   return await usersCollection.updateOne({ _id: user._id }, { $set: { restricted: true } });
   };
   
@@ -172,7 +166,6 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   
   Check if a user has admin permissions.
   @param {string} email - The user's email address.
-  @returns {Promise<boolean>} A promise that resolves with a boolean indicating if the user has admin permissions.
   @throws {Error} If the user is not found.
   */
   const isAdmin = async (email) => {
@@ -188,7 +181,6 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   
   Delete a user by their email address.
   @param {string} email - The user's email address.
-  @returns {Promise<Object>} A promise that resolves with the result of the delete operation.
   @throws {Error} If the user is not found.
   */
   const deleteUser = async (email) => {
@@ -198,7 +190,7 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
     throw new Error('User not found');
     }
     
-    const usersCollection = await userCollection();
+    const usersCollection = await users;
     return await usersCollection.deleteOne({ _id: user._id });
     };
     
