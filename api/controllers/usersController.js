@@ -19,7 +19,6 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * @param {Array} potholesCreated - The potholes created by the user.
  * @param {string} username - The user's username.
  * @param {Date} birthday - The user's birthday.
- * @returns {Promise<Object>} A promise that resolves with an object indicating successful user creation.
  * @throws {Error} If there is an issue with the input or user creation fails.
  */
 const createUser = async (
@@ -85,7 +84,6 @@ const createUser = async (
  *
  * @param {string} email - The user's email address.
  * @param {string} password - The user's password.
- * @returns {Promise<Object>} A promise that resolves with an object indicating successful user authentication.
  * @throws {Error} If the email or password is invalid.
  */
 const checkUser = async (email, password) => {
@@ -120,7 +118,6 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   
   Find a user by their email address.
   @param {string} email - The user's email address.
-  @returns {Promise<Object>} A promise that resolves with the found user object or null if the user is not found.
   @throws {Error} If the email is invalid.
   */
   const findUser = async (email) => {
@@ -136,7 +133,6 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   Change the permissions (role) of a user.
   @param {string} email - The user's email address.
   @param {string} role - The new role for the user.
-  @returns {Promise<Object>} A promise that resolves with the result of the update operation.
   @throws {Error} If the user is not found.
   */
   const changePermissions = async (email, role) => {
@@ -154,7 +150,6 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   
   Restrict a user's access.
   @param {string} email - The user's email address.
-  @returns {Promise<Object>} A promise that resolves with the result of the update operation.
   @throws {Error} If the user is not found.
   */
   const restrictUser = async (email) => {
@@ -171,7 +166,6 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   
   Check if a user has admin permissions.
   @param {string} email - The user's email address.
-  @returns {Promise<boolean>} A promise that resolves with a boolean indicating if the user has admin permissions.
   @throws {Error} If the user is not found.
   */
   const isAdmin = async (email) => {
@@ -187,7 +181,6 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   
   Delete a user by their email address.
   @param {string} email - The user's email address.
-  @returns {Promise<Object>} A promise that resolves with the result of the delete operation.
   @throws {Error} If the user is not found.
   */
   const deleteUser = async (email) => {
