@@ -1,6 +1,5 @@
 
-const mongoCollections = require("../config/mongoCollections");
-const userCollection = mongoCollections.user_collection;
+import { users } from "../db/collections.js";
 const saltRounds = 10;
 
 const usernameRegex = /^[a-zA-Z0-9]{4,}$/;
@@ -47,7 +46,7 @@ const createUser = async (
   }
 
   // Check for existing user
-  const usersCollection = await userCollection();
+  const usersCollection = await users;
   const userExists = await usersCollection.findOne({ email: email.toLowerCase() });
 
   if (userExists) {
@@ -99,7 +98,7 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   }
   
   // Find user in database
-  const usersCollection = await userCollection();
+  const usersCollection = await users;
   const user = await usersCollection.findOne({ email: email.toLowerCase() });
   
   // Validate user
@@ -128,7 +127,7 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   throw new Error('Email must be a valid email address');
   }
-  const usersCollection = await userCollection();
+  const usersCollection = await users;
   return await usersCollection.findOne({ email: email.toLowerCase() });
   };
   
@@ -146,7 +145,7 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   throw new Error('User not found');
   }
   
-  const usersCollection = await userCollection();
+  const usersCollection = await users;
   return await usersCollection.updateOne({ _id: user._id },
   { $set: { role } });
   };
@@ -164,7 +163,7 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
   throw new Error('User not found');
   }
   
-  const usersCollection = await userCollection();
+  const usersCollection = await users;
   return await usersCollection.updateOne({ _id: user._id }, { $set: { restricted: true } });
   };
   
@@ -198,7 +197,7 @@ if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
     throw new Error('User not found');
     }
     
-    const usersCollection = await userCollection();
+    const usersCollection = await users;
     return await usersCollection.deleteOne({ _id: user._id });
     };
     
