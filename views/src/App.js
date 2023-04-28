@@ -36,14 +36,16 @@ function App() {
 
   return (
     <>
-      <Navbar sx={{ backgroundColor: "blue", width: "100%" }} />
+      
       <Box
         sx={{
           height: "1000px",
         }}
       >
+        
         <Grid container spacing={2} gridTemplateColumns="repeat(12, 1fr)">
           <Grid item xs={12} md={8} lg={10}>
+          
             <InteractiveMap
               item
               doubleClickZoom={false}
@@ -57,6 +59,7 @@ function App() {
               mapboxAccessToken={env.MAPBOX_TOKEN}
               onDblClick={handleNewMarker}
             >
+              <Navbar sx={{ backgroundColor: "blue", width: "100%" }} />
               <GeolocateControl />
               <FullscreenControl />
               <ScaleControl />
