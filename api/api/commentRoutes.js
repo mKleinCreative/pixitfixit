@@ -48,3 +48,5 @@ router.delete("/comment/pothole/delete", async (req, res) => {
     res.status(400).json({ error: "this comment was not able to be deleted!" });
   }
 });
+
+export default router;
