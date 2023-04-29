@@ -182,6 +182,8 @@ export default function Navbar() {
               </Modal>
             </>
           ) : null}
+          {sessionStorage.admin ?
+          <>
           <Button onClick={() => setAdminModalOpen(true)}>Admin</Button>
           <Modal
             open={openAdminModal}
@@ -216,7 +218,10 @@ export default function Navbar() {
                 close
               </Button>
             </Box>
-          </Modal>
+          </Modal> 
+          </>
+          : null
+          }
         </ButtonGroup>
       {
         sessionStorage.user ?
