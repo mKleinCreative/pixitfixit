@@ -69,7 +69,7 @@ let exportedMethods = {
 
     try {
       const allPotholes = await potholes
-        .find({}, { projection: { comments: 1 } })
+        .find({ _id: parsedPotholeID }, { projection: { comments: 1 } })
         .toArray();
 
       if (!allPotholes) throw "there are no comments for this pothole!";
