@@ -1,18 +1,12 @@
-const express = require('express');
+import express from 'express';
+import configRoutes from "./config/keys.js";
+import session from "express-session";
+import bodyParser from "body-parser";
+
 const app = express();
-const configRoutes = require('./routes');
-const exphbs = require('express-handlebars');
-const session = require('express-session');
-const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.engine('handlebars', exphbs.engine({
-    defaultLayout: 'main'
-}));
-app.set('view engine', 'handlebars');
-
 
 app.use(
   session({
@@ -47,8 +41,6 @@ const authMiddleware = (req, res, next) => {
 
 // Use authentication middleware for the /protected route
 app.use('/forbiddenAccess', authMiddleware);
-
-configRoutes(app);
 
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
