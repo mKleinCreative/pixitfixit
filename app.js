@@ -42,6 +42,6 @@ const authMiddleware = (req, res, next) => {
 // Use authentication middleware for the /protected route
 app.use('/forbiddenAccess', authMiddleware);
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
+app.listen(8080, () => {
+  console.log('Server is running on http://localhost:8080');
 });
