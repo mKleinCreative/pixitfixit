@@ -18,7 +18,6 @@ function App() {
   const [markers, setMarkers] = useState([]);
   const [showPopup, setShowPopup] = useState(false)
   const [zipcode, setZipcode] = useState(null)
-
   const [viewport, setViewport] = useState({
     lng: 0,
     lat: 0,
