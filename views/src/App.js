@@ -1,6 +1,4 @@
 import './App.css';
-import mapboxgl from "mapbox-gl";
-import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import InteractiveMap, { 
   Marker, 
   GeolocateControl, 
@@ -14,22 +12,44 @@ import env from "react-dotenv";
 import { Grid, Box, Modal } from '@mui/material'
 import Navbar from './helpers/Navbar.js';
 import MarkerDialog from './components/MarkerDialog.js'
+import { getCoordinatesFromZipcode } from "./helpers/utils.js";
 
 function App() {
-
-  const [lng, setLng] = useState(30.5);
-  const [lat, setLat] = useState(50.5);
-  const [zoom, setZoom] = useState(9);
   const [markers, setMarkers] = useState([]);
   const [showPopup, setShowPopup] = useState(false)
+  const [zipcode, setZipcode] = useState(null)
+
+  const [viewport, setViewport] = useState({
+    lng: 0,
+    lat: 0,
+    zoom: 10,
+  });
+
+     useEffect(() => {
+      async function setInitialCoordinates() {
+        setZipcode("55101");
+
+        const { latitude, longitude } = await getCoordinatesFromZipcode(
+          zipcode
+        );
+        setViewport((prevViewport) => ({
+          ...prevViewport,
+          latitude,
+          longitude,
+        }));
+      }
+
+      setInitialCoordinates();
+    }, [zipcode]);
+    
 
   const handleNewMarker = (e) => {
-    console.log(e.lngLat)
     const longitude = e.lngLat.lng
     const latitude = e.lngLat.lat
 
     setMarkers(markers => [...markers, {longitude, latitude}])
   };
+
   const handleShowPopup = () => {
     setShowPopup(!showPopup);
   }
@@ -49,11 +69,7 @@ function App() {
             <InteractiveMap
               item
               doubleClickZoom={false}
-              initialViewState={{
-                longitude: -100,
-                latitude: 40,
-                zoom: 3.5,
-              }}
+              {...viewport}
               style={{ width: "100vw", height: "100vh" }}
               mapStyle="mapbox://styles/mapbox/streets-v11"
               mapboxAccessToken={env.MAPBOX_TOKEN}
