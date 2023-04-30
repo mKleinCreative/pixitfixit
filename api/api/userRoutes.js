@@ -1,5 +1,7 @@
+import express from "express"
+import { userController } from "../controllers/index.js";
+
 const router = express.Router();
-import { userData } from "../controllers/index.js";
 router.post("/register", async (req, res) => {
   try {
     const {
@@ -15,7 +17,7 @@ router.post("/register", async (req, res) => {
       birthday,
     } = req.body;
 
-    await userData.createUser(
+    await userController.createUser(
       firstName,
       lastName,
       email,
@@ -37,7 +39,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    await userData.checkUser(email, password);
+    await userController.checkUser(email, password);
     res.status(200).json({ message: "Authenticated successfully" });
   } catch (error) {
     res.status(401).json({ error: error.message });
@@ -47,7 +49,7 @@ router.post("/login", async (req, res) => {
 router.get("/findUser/:email", async (req, res) => {
   try {
     const { email } = req.params;
-    const user = await userData.findUser(email);
+    const user = await userController.findUser(email);
     res.status(200).json(user);
   } catch (error) {
     res.status(404).json({ error: error.message });
@@ -57,7 +59,7 @@ router.get("/findUser/:email", async (req, res) => {
 router.patch("/changePermissions/:email/:role", async (req, res) => {
   try {
     const { email, role } = req.params;
-    await userData.changePermissions(email, role);
+    await userController.changePermissions(email, role);
     res.status(200).json({ message: "Permissions changed successfully" });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -67,7 +69,7 @@ router.patch("/changePermissions/:email/:role", async (req, res) => {
 router.patch("/restrictUser/:email", async (req, res) => {
   try {
     const { email } = req.params;
-    await userData.restrictUser(email);
+    await userController.restrictUser(email);
     res.status(200).json({ message: "User access restricted" });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -77,7 +79,7 @@ router.patch("/restrictUser/:email", async (req, res) => {
 router.get("/isAdmin/:email", async (req, res) => {
   try {
     const { email } = req.params;
-    const isAdmin = await userData.isAdmin(email);
+    const isAdmin = await userController.isAdmin(email);
     res.status(200).json({ isAdmin });
   } catch (error) {
     res.status(404).json({ error: error.message });
@@ -87,7 +89,7 @@ router.get("/isAdmin/:email", async (req, res) => {
 router.delete("/deleteUser/:email", async (req, res) => {
   try {
     const { email } = req.params;
-    await userData.deleteUser(email);
+    await userController.deleteUser(email);
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(404).json({ error: error.message });

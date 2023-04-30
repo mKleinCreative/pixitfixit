@@ -1,39 +1,38 @@
-import { comment } from "../db/collections";
-import { users } from "../db/collections";
-import { pothole } from "../db/collections";
-const { ObjectId } = require("mongodb");
+import { users, comment, pothole } from "../db/collections.js";
+import { ObjectId } from "mongodb";
 
 let exportedMethods = {
   async CreateComment(user_id, pothole_id, message, PhotoUrL) {
-    if (!user_id || typeof user_id !== "string") throw "Invalid UserID";
-    if (!pothole_id || typeof pothole_id !== "string") throw "Invalid UserID";
-    if (!message || typeof message !== "string") throw "Invalid UserID";
-    if (message.length < 3) throw "This message is too short";
-    if (!PhotoUrL || typeof PhotoUrL !== "string") throw "Invalid Photo";
+    // if (!user_id || typeof user_id !== "string") throw "Invalid UserID";
+    // if (!pothole_id || typeof pothole_id !== "string") throw "Invalid UserID";
+    // if (!message || typeof message !== "string") throw "Invalid UserID";
+    // if (message.length < 3) throw "This message is too short";
+    // if (!PhotoUrL || typeof PhotoUrL !== "string") throw "Invalid Photo";
 
-    const parsedId = ObjectId(user_id);
+    const parsedId = new ObjectId(user_id);
+    const parsedPotholeID = new ObjectId(pothole_id);
 
-    const parsedPotholeID = ObjectId(pothole_id);
     const commentCollection = await comment();
     const usercollections = await users();
     const potHoleCollections = await pothole();
 
-    let userDbCheck = await users.exists({ _id: parsedId });
+    // let userDbCheck = await users.exists({ _id: parsedId });
 
-    if (userDbCheck == false) throw "this user does not exist!";
+    // if (userDbCheck == false) throw "this user does not exist!";
 
-    let potholeDbCheck = await pothole.exists({ _id: parsedPotholeID });
+    // let potholeDbCheck = await pothole.exists({ _id: parsedPotholeID });
 
-    if (potholeDbCheck == false) throw "This pothole does not exist!!";
+    // if (potholeDbCheck == false) throw "This pothole does not exist!!";
 
     // insert the comment into the array of comments in the Pothole!
 
     const newComment = {
       user_id: parsedId,
+      pothole_id: parsedPotholeID,
       message: message,
       PhotoUrL: PhotoUrL,
     };
-
+    console.log(newComment);
     const insertedComment = await commentCollection.insertOne(newComment);
 
     const commentId = insertedComment.insertedId;
@@ -48,16 +47,17 @@ let exportedMethods = {
       { $push: { comments: commentId } }
     );
 
-    if (
-      insertedComment.acknowledged === true &&
-      useridCollection.acknowledged === true &&
-      potholeidCollection.acknowledged == true
-    ) {
-      console.log(newComment);
-      return newComment;
-    } else {
-      throw "this did not work!";
-    }
+    // if (
+    //   insertedComment.acknowledged === true &&
+    //   useridCollection.acknowledged === true &&
+    //   potholeidCollection.acknowledged == true
+    // ) {
+    console.log(await newComment);
+
+    // } else {
+    //   throw "this did not work!";
+    // }
+    return newComment;
   },
   async GetAllPotholeComments(pothole_id) {
     if (!pothole_id || typeof pothole_id !== "string")

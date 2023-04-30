@@ -1,11 +1,8 @@
-import { comment } from "../db/collections";
-import { users } from "../db/collections";
-import { pothole } from "../db/collections";
-const { ObjectId } = require("mongodb");
+import { pothole } from "../db/collections.js";
+import { ObjectId } from "mongodb";
 
 let exportedMethods = {
   async CreatePotHole(
-    _id,
     user_id,
     status,
     photo_url,
@@ -15,10 +12,6 @@ let exportedMethods = {
     zipcode,
     comments
   ) {
-    if (!_id || typeof _id !== "string") {
-      throw new Error("Invalid pothole ID");
-    }
-
     if (!user_id || typeof user_id !== "string") {
       throw new Error("Invalid user ID");
     }
@@ -30,12 +23,11 @@ let exportedMethods = {
     if (!photo_url || typeof photo_url !== "string") {
       throw new Error("Invalid photo URL");
     }
-
-    if (!lat || typeof lat !== "number") {
+    if (!lat || typeof lat !== "string") {
       throw new Error("Invalid latitude");
     }
 
-    if (!long || typeof long !== "number") {
+    if (!long || typeof long !== "string") {
       throw new Error("Invalid longitude");
     }
 
@@ -51,9 +43,8 @@ let exportedMethods = {
       throw new Error("Invalid comments");
     }
 
-    const potholes = await potholesCollection();
+    const potholes = await pothole();
     const newPothole = {
-      _id,
       user_id,
       status,
       photo_url,
@@ -84,7 +75,7 @@ let exportedMethods = {
       throw new Error("Invalid status");
     }
 
-    const potholes = await potholesCollection();
+    const potholes = await pothole();
 
     try {
       const parsedId = ObjectId(_id);
@@ -116,7 +107,7 @@ let exportedMethods = {
       throw new Error("Invalid zipcode");
     }
 
-    const potholes = await potholesCollection();
+    const potholes = await pothole();
 
     try {
       const allPotholes = await potholes.find({ zipcode }).toArray();
@@ -135,7 +126,7 @@ let exportedMethods = {
       throw new Error("Invalid pothole ID");
     }
 
-    const potholes = await potholesCollection();
+    const potholes = await pothole();
 
     try {
       const parsedId = ObjectId(_id);
@@ -159,7 +150,7 @@ let exportedMethods = {
       throw new Error("Invalid user ID for assignment");
     }
 
-    const potholes = await potholesCollection();
+    const potholes = await pothole();
 
     try {
       const parsedId = ObjectId(_id);
@@ -191,7 +182,7 @@ let exportedMethods = {
       throw new Error("Invalid pothole ID");
     }
 
-    const potholes = await potholesCollection();
+    const potholes = await pothole();
 
     try {
       const parsedId = ObjectId(_id);
@@ -207,7 +198,7 @@ let exportedMethods = {
     return { deletedPothole: true };
   },
   async GetAllPotholeComments() {
-    const potholes = await potholesCollection();
+    const potholes = await pothole();
 
     try {
       const allPotholes = await potholes
@@ -234,7 +225,7 @@ let exportedMethods = {
       throw new Error("Invalid photo URL");
     }
 
-    const potholes = await potholesCollection();
+    const potholes = await pothole();
 
     try {
       const parsedId = ObjectId(_id);
