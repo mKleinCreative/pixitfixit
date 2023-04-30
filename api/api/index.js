@@ -1,15 +1,16 @@
 import potholeRoutes from "./potholeRoutes.js";
 import userRoutes from "./userRoutes.js";
 import commentRoutes from "./commentRoutes.js";
+import express from "express"
+const router = express.Router()
 
-const constructorMethod = (app) => {
-  app.use("/potholeRoutes", potholeRoutes);
-  app.use("/userRoutes", userRoutes);
-  app.use("/commentRoutes", commentRoutes);
+  router.use("/potholeRoutes", potholeRoutes);
+  router.use("/userRoutes", userRoutes);
+  router.use("/commentRoutes", commentRoutes);
 
-  app.use("*", (req, res) => {
+  router.use("*", (req, res) => {
     res.sendStatus(404);
   });
-};
 
-export default constructorMethod;
+
+export default router;

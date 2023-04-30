@@ -79,7 +79,7 @@ let exportedMethods = {
       email: email.toLowerCase(),
       password: hashedPassword,
       role,
-      comment,
+      comments,
       assignedPotholes,
       potholesCreated,
       username,

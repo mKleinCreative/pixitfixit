@@ -1,13 +1,13 @@
 import express, { response } from "express";
 
-import { commentData } from "../controllers/index.js";
+import { commentController } from "../controllers/index.js";
 
 const router = express.Router();
 
-router.post("/createcomment", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { user_id, pothole_id, message, PhotoUrl } = req.body;
-    const createdcomment = await commentData.CreateComment(
+    const createdcomment = await commentController.CreateComment(
       user_id,
       pothole_id,
       message,
@@ -21,7 +21,7 @@ router.post("/createcomment", async (req, res) => {
 router.get("/comment/pothole/:id", async (req, res) => {
   try {
     const { pothole_id } = req.params;
-    const allpotholeComments = await commentData.GetAllPotholeComments(
+    const allpotholeComments = await commentController.GetAllPotholeComments(
       pothole_id
     );
     res.status(201).json(allpotholeComments);
@@ -32,7 +32,7 @@ router.get("/comment/pothole/:id", async (req, res) => {
 router.get("/comment/:id", async (req, res) => {
   try {
     const { user_id } = req.params;
-    const comment = await commentData.GetAllCommentsByUser(user_id);
+    const comment = await commentController.GetAllCommentsByUser(user_id);
     res.status(201).json(comment);
   } catch (error) {
     res.status(400).json({ error: "there is no comments need to try again!" });
@@ -42,7 +42,10 @@ router.get("/comment/:id", async (req, res) => {
 router.delete("/comment/pothole/delete", async (req, res) => {
   try {
     const { comment_id, user_id } = req.params;
-    const deletedComment = await commentData.DeleteComment(comment_id, user_id);
+    const deletedComment = await commentController.DeleteComment(
+      comment_id,
+      user_id
+    );
     res.status(201).json(deletedComment);
   } catch (error) {
     res.status(400).json({ error: "this comment was not able to be deleted!" });
@@ -50,4 +53,3 @@ router.delete("/comment/pothole/delete", async (req, res) => {
 });
 
 export default router;
-
