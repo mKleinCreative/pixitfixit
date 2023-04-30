@@ -86,10 +86,19 @@ router.get("/isAdmin/:email", async (req, res) => {
   }
 });
 
-router.delete("/deleteUser/:email", async (req, res) => {
+router.get("/users", async (req, res) => {
   try {
-    const { email } = req.params;
-    await userController.deleteUser(email);
+    const users = await userController.getAllUsers;
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+});
+
+router.delete("/deleteUser/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await userController.deleteUser(id);
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(404).json({ error: error.message });

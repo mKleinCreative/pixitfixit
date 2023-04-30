@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {Button, ButtonGroup, Drawer, Modal, Box, TextField} from "@mui/material"
 import { display } from "@mui/system";
 import axios from 'axios'
@@ -10,12 +10,16 @@ export default function Navbar() {
  const [openRegisterModal, setRegisterModalOpen] = useState(false);
  const [openAdminModal, setAdminModalOpen] = useState(false);
  const [loggedIn, setLoggedIn] = useState(false)
+ const [users, setUsers] = useState([]);
+
+ useEffect(() => {
+    const users = axios.get(`/users`)
+    setUsers(users);
+ }, [])
 
 
  const removeUser = (id) => {
-    axios.post("/users/delete", {
-        _id: id
-    })
+    axios.post(`/deleteUser/${id}`)
  }
 
 
@@ -192,7 +196,7 @@ export default function Navbar() {
           >
             <Box sx={adminStyle}>
               <h1>Admin portal</h1>
-              {mockData.map((e, i) => {
+              {users.map((e, i) => {
                 return (
                   <div style={{ display: "flex", marginBottom: "1rem" }}>
                     <p style={{ marginRight: "1rem" }} key={i}>
