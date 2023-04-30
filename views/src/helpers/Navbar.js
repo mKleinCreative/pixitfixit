@@ -10,6 +10,7 @@ export default function Navbar() {
  const [openRegisterModal, setRegisterModalOpen] = useState(false);
  const [openAdminModal, setAdminModalOpen] = useState(false);
  const [loggedIn, setLoggedIn] = useState(false)
+ const [userToValidate, setUserToValidate] = useState({})
  const [newUser, setNewUser] = useState({})
  const [users, setUsers] = useState([])
 
@@ -62,14 +63,22 @@ export default function Navbar() {
 
   }
 
-  const handleLogin = async (username, password) => {
+  const handleLogin = async () => {
   // Perform your authentication logic here
-    // if (/* authentication is successful */) {
-      sessionStorage.setItem("user", username);
+    const validUser = await axios.post('/userRoutes/login', userToValidate)
+    console.log("user trying to log in", validUser.data.data)
+    if (validUser) {
+      sessionStorage.setItem("user", JSON.stringify(validUser.data.data));
       setLoggedIn(true);
       setOpen(false);
-    // }
+    }
   };
+
+  const handeLogout = async () => {
+    console.log(sessionStorage)
+    sessionStorage.setItem("user", false)
+    setLoggedIn(false);
+  }
 
   return (
     <React.Fragment>
@@ -95,7 +104,7 @@ export default function Navbar() {
           variant="text"
           aria-label="outlined primary button group"
         >
-          {!sessionStorage.user ? (
+          {sessionStorage.user === 'false' ? (
             <>
               <Button onClick={() => setLoginModalOpen(true)}>Login</Button>
               <Modal
@@ -110,11 +119,25 @@ export default function Navbar() {
                       id="standard-basic"
                       label="Email"
                       variant="standard"
+                      value={userToValidate.email}
+                      onChange={(e) =>
+                        setUserToValidate({
+                          ...userToValidate,
+                          email: e.target.value,
+                        })
+                      }
                     />
                     <TextField
                       id="standard-basic"
                       label="Password"
                       variant="standard"
+                      value={userToValidate.password}
+                      onChange={(e) =>
+                        setUserToValidate({
+                          ...userToValidate,
+                          password: e.target.value,
+                        })
+                      }
                     />
                   </form>
                   <Button
@@ -129,7 +152,7 @@ export default function Navbar() {
                     sx={{ mt: 3 }}
                     color="primary"
                     variant="outlined"
-                    onClick={() => setLoginModalOpen(false)}
+                    onClick={() => handleLogin()}
                   >
                     login
                   </Button>
@@ -151,7 +174,9 @@ export default function Navbar() {
                       sx={{ mr: 2 }}
                       id="standard-basic"
                       label="First Name"
-                      onChange={(e) => setNewUser({...newUser, firstName: e.target.value})}
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, firstName: e.target.value })
+                      }
                       variant="standard"
                       required
                     />
@@ -160,7 +185,9 @@ export default function Navbar() {
                       sx={{ mr: 2 }}
                       id="standard-basic"
                       label="Last Name"
-                      onChange={(e) => setNewUser({...newUser, lastName: e.target.value})}
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, lastName: e.target.value })
+                      }
                       variant="standard"
                       required
                     />
@@ -169,7 +196,9 @@ export default function Navbar() {
                       sx={{ mr: 2 }}
                       id="standard-basic"
                       label="Email"
-                      onChange={(e) => setNewUser({...newUser, email: e.target.value})}
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, email: e.target.value })
+                      }
                       variant="standard"
                       required
                     />
@@ -178,7 +207,9 @@ export default function Navbar() {
                       id="standard-basic"
                       label="Password"
                       variant="standard"
-                      onChange={(e) => setNewUser({...newUser, password: e.target.value})}
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, password: e.target.value })
+                      }
                       required
                     />
                     <TextField
@@ -189,7 +220,7 @@ export default function Navbar() {
                       label="Age"
                       variant="standard"
                       onChange={(e) =>
-                        setNewUser({...newUser,  age: e.target.value })
+                        setNewUser({ ...newUser, age: e.target.value })
                       }
                       required
                     />
@@ -201,7 +232,7 @@ export default function Navbar() {
                       label="Zipcode"
                       variant="standard"
                       onChange={(e) =>
-                        setNewUser({...newUser,  zipcode: e.target.value })
+                        setNewUser({ ...newUser, zipcode: e.target.value })
                       }
                       required
                     />
@@ -225,7 +256,18 @@ export default function Navbar() {
                 </Box>
               </Modal>
             </>
-          ) : null}
+          ) : 
+          <>
+            <Button
+              sx={{ mt: 3 }}
+              color="error"
+              variant="outlined"
+              onClick={() => handeLogout()}
+            >
+              logout
+            </Button>
+          </>
+        }
           {sessionStorage.admin ? (
             <>
               <Button onClick={() => setAdminModalOpen(true)}>Admin</Button>

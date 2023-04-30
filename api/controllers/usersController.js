@@ -141,9 +141,6 @@ let exportedMethods = {
   },
 
   async findUserByID(id) {
-    // if (!email || typeof email !== "string" || !emailRegex.test(email)) {
-    //   throw new Error("Email must be a valid email address");
-    // }
     const usersCollection = await users();
     return await usersCollection.findOne({ _id: ObjectId(id) });
   },

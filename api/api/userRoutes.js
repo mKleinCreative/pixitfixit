@@ -5,22 +5,23 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   try {
     console.log("I am req.body", req.body)
-    // const {
-    //   firstName,
-    //   lastName,
-    //   email,
-    //   password,
-    //   age
-    // } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      age,
+      zipcode
+    } = req.body;
 
 
     await userController.createUser(
-      req.body.firstName,
-      req.body.lastName,
-      req.body.email,
-      req.body.password,
-      req.body.age,
-      req.body.zipcode
+      firstName,
+      lastName,
+      email,
+      password,
+      age,
+      zipcode
     );
 
     res.status(201).json({ message: "User created successfully" });
@@ -33,7 +34,9 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     await userController.checkUser(email, password);
-    res.status(200).json({ message: "Authenticated successfully" });
+    console.log("user data", await userController.findUser(email))
+    const loggedInUser = await userController.findUser(email);
+    res.status(200).json({ message: "Authenticated successfully", data: loggedInUser });
   } catch (error) {
     res.status(401).json({ error: error.message });
   }
@@ -44,6 +47,7 @@ router.get("/findUser/:email", async (req, res) => {
     const { email } = req.params;
     const user = await userController.findUser(email);
     res.status(200).json(user);
+    return user
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
