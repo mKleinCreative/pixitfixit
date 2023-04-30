@@ -24,17 +24,12 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  */
 
 let exportedMethods = {
-  async createUser(
-    firstName,
-    lastName,
-    email,
-    password,
-    birthday,
-    zipcode
-  ) {
+  async createUser(firstName, lastName, email, password, birthday, zipcode) {
     // Validate input
-    console.log('inside createUser');
+    console.log("inside createUser");
     if (!email || typeof email !== "string" || !emailRegex.test(email)) {
+      console.log(email);
+      console.log(firstName, lastName);
       throw new Error("Email must be a valid email address");
     }
     if (
@@ -74,7 +69,7 @@ let exportedMethods = {
       zipcode,
       restricted: false,
     };
-    console.log(`in usersController looking at a ${newUser}`)
+    console.log(`in usersController looking at a ${newUser}`);
 
     // Insert user into database
 
@@ -134,6 +129,7 @@ let exportedMethods = {
     */
   async findUser(email) {
     if (!email || typeof email !== "string" || !emailRegex.test(email)) {
+      console.log(email);
       throw new Error("Email must be a valid email address");
     }
     const usersCollection = await users();
@@ -153,7 +149,7 @@ let exportedMethods = {
     @throws {Error} If the user is not found.
     */
   async changePermissions(email, role) {
-    const user = await findUser(email);
+    const user = await this.findUser(email);
     if (!user) {
       throw new Error("User not found");
     }
@@ -172,7 +168,7 @@ let exportedMethods = {
     @throws {Error} If the user is not found.
     */
   async restrictUser(email) {
-    const user = await findUser(email);
+    const user = await this.findUser(email);
     if (!user) {
       throw new Error("User not found");
     }
@@ -191,7 +187,7 @@ let exportedMethods = {
     @throws {Error} If the user is not found.
     */
   async isAdmin(email) {
-    const user = await findUser(email);
+    const user = await this.findUser(email);
     if (!user) {
       throw new Error("User not found");
     }
@@ -204,10 +200,10 @@ let exportedMethods = {
     Get users
     @throws {Error} If no users
     */
-    async getAllUsers() {
-      const usersCollection = await users();
-      return await usersCollection.find({}).toArray();
-    },
+  async getAllUsers() {
+    const usersCollection = await users();
+    return await usersCollection.find({}).toArray();
+  },
 
   /**
     
@@ -223,9 +219,9 @@ let exportedMethods = {
     // }
 
     const usersCollection = await users();
-    const parsedId = new ObjectId(id)
+    const parsedId = new ObjectId(id);
 
-    console.log('id in delete user', parsedId)
+    console.log("id in delete user", parsedId);
     return await usersCollection.deleteOne({ _id: parsedId });
   },
 };
