@@ -19,7 +19,6 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * @param {string} comment - The user's comment.
  * @param {Array} assignedPotholes - The potholes assigned to the user.
  * @param {Array} potholesCreated - The potholes created by the user.
- * @param {string} username - The user's username.
  * @param {Date} birthday - The user's birthday.
  * @throws {Error} If there is an issue with the input or user creation fails.
  */
@@ -30,14 +29,11 @@ let exportedMethods = {
     lastName,
     email,
     password,
-    role,
-    comment,
-    assignedPotholes,
-    potholesCreated,
-    username,
-    birthday
+    birthday,
+    zipcode
   ) {
     // Validate input
+    console.log('inside createUser');
     if (!email || typeof email !== "string" || !emailRegex.test(email)) {
       throw new Error("Email must be a valid email address");
     }
@@ -48,15 +44,6 @@ let exportedMethods = {
     ) {
       throw new Error(
         "Password must be a non-empty string with at least 6 characters, including one uppercase character, one number, and one special character"
-      );
-    }
-    if (
-      !username ||
-      typeof username !== "string" ||
-      !usernameRegex.test(username)
-    ) {
-      throw new Error(
-        "Username must be a non-empty alphanumeric string with at least 4 characters and no spaces"
       );
     }
 
@@ -79,13 +66,15 @@ let exportedMethods = {
       lastName,
       email: email.toLowerCase(),
       password: hashedPassword,
-      role,
+      role: "user",
       comments: [],
       assignedPotholes: [],
       potholesCreated: [],
       birthday,
+      zipcode,
       restricted: false,
     };
+    console.log(`in usersController looking at a ${newUser}`)
 
     // Insert user into database
 

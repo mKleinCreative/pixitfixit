@@ -240,7 +240,7 @@ export default function Navbar() {
                     return (
                       <div style={{ display: "flex", marginBottom: "1rem" }}>
                         <p style={{ marginRight: "1rem" }} key={i}>
-                          {e.username}
+                          {`${e.email}: ${e.firstName}, ${e.lastName}`}
                         </p>
                         <Button
                           key={i + 1}

@@ -19,11 +19,8 @@ router.post("/register", async (req, res) => {
       req.body.lastName,
       req.body.email,
       req.body.password,
-      (role = "user"),
-      (comments = []),
-      (assignedPotholes = []),
-      (potholesCreated = []),
-      req.body.age
+      req.body.age,
+      req.body.zipcode
     );
 
     res.status(201).json({ message: "User created successfully" });
