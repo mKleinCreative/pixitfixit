@@ -52,9 +52,9 @@ router.get("/findUser/", async (req, res) => {
   }
 });
 
-router.patch("/changePermissions/:email/:role", async (req, res) => {
+router.patch("/changePermissions/", async (req, res) => {
   try {
-    const { email, role } = req.params;
+    const { email, role } = req.body;
     await userController.changePermissions(email, role);
     res.status(200).json({ message: "Permissions changed successfully" });
   } catch (error) {
@@ -62,9 +62,9 @@ router.patch("/changePermissions/:email/:role", async (req, res) => {
   }
 });
 
-router.patch("/restrictUser/:email", async (req, res) => {
+router.patch("/restrictUser", async (req, res) => {
   try {
-    const { email } = req.params;
+    const { email } = req.body;
     await userController.restrictUser(email);
     res.status(200).json({ message: "User access restricted" });
   } catch (error) {
@@ -72,9 +72,9 @@ router.patch("/restrictUser/:email", async (req, res) => {
   }
 });
 
-router.get("/isAdmin/:email", async (req, res) => {
+router.get("/isAdmin", async (req, res) => {
   try {
-    const { email } = req.params;
+    const { email } = req.body;
     const isAdmin = await userController.isAdmin(email);
     res.status(200).json({ isAdmin });
   } catch (error) {
