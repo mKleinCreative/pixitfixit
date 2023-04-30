@@ -207,6 +207,16 @@ let exportedMethods = {
 
   /**
     
+    Get users
+    @throws {Error} If no users
+    */
+    async getAllUsers() {
+      const usersCollection = await users;
+      return await usersCollection.findAll();
+    },
+
+  /**
+    
     Delete a user by their email address.
     @param {string} email - The user's email address.
     @throws {Error} If the user is not found.

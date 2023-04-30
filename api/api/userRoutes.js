@@ -86,6 +86,15 @@ router.get("/isAdmin/:email", async (req, res) => {
   }
 });
 
+router.get("/users", async (req, res) => {
+  try {
+    const users = await userController.getAllUsers;
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+});
+
 router.delete("/deleteUser/:id", async (req, res) => {
   try {
     const { id } = req.params;
