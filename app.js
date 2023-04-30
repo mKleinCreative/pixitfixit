@@ -3,17 +3,18 @@ import configRoutes from "./config/keys.js";
 import session from "express-session";
 import bodyParser from "body-parser";
 import api from "./api/api/index.js";
-import cors from 'cors'
+// import cors from 'cors'
 
 const app = express();
-app.use(api);
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-  })
-);
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(api);
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//   })
+// );
 // app.use(
 //   session({
 //     name: "AuthCookie",

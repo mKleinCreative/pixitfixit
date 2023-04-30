@@ -4,28 +4,26 @@ import { userController } from "../controllers/index.js";
 const router = express.Router();
 router.post("/register", async (req, res) => {
   try {
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      role,
-      comments,
-      assignedPotholes,
-      potholesCreated,
-      birthday
-    } = req.body;
+    console.log("I am req.body", req.body)
+    // const {
+    //   firstName,
+    //   lastName,
+    //   email,
+    //   password,
+    //   age
+    // } = req.body;
+
 
     await userController.createUser(
-      firstName,
-      lastName,
-      email,
-      password,
-      role,
-      comments,
-      assignedPotholes,
-      potholesCreated,
-      birthday
+      req.body.firstName,
+      req.body.lastName,
+      req.body.email,
+      req.body.password,
+      (role = "user"),
+      (comments = []),
+      (assignedPotholes = []),
+      (potholesCreated = []),
+      req.body.age
     );
 
     res.status(201).json({ message: "User created successfully" });
@@ -93,8 +91,9 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.delete("/deleteUser/:id", async (req, res) => {
+router.get("/deleteUser/:id", async (req, res) => {
   try {
+    console.log('In delete user', req.params)
     const { id } = req.params;
     await userController.deleteUser(id);
     res.status(200).json({ message: "User deleted successfully" });

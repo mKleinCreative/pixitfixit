@@ -1,5 +1,6 @@
 import { users } from "../db/collections.js";
 import bcrypt from "bcryptjs/dist/bcrypt.js";
+import { ObjectId } from "mongodb";
 const saltRounds = 10;
 
 const usernameRegex = /^[a-zA-Z0-9]{4,}$/;
@@ -79,10 +80,9 @@ let exportedMethods = {
       email: email.toLowerCase(),
       password: hashedPassword,
       role,
-      comments,
-      assignedPotholes,
-      potholesCreated,
-      username,
+      comments: [],
+      assignedPotholes: [],
+      potholesCreated: [],
       birthday,
       restricted: false,
     };
@@ -149,6 +149,14 @@ let exportedMethods = {
     }
     const usersCollection = await users();
     return await usersCollection.findOne({ email: email.toLowerCase() });
+  },
+
+  async findUserByID(id) {
+    // if (!email || typeof email !== "string" || !emailRegex.test(email)) {
+    //   throw new Error("Email must be a valid email address");
+    // }
+    const usersCollection = await users();
+    return await usersCollection.findOne({ _id: ObjectId(id) });
   },
 
   /**
@@ -222,14 +230,17 @@ let exportedMethods = {
     @throws {Error} If the user id is not found.
     */
   async deleteUser(id) {
-    const user = await findUser(id);
+    // const user = await findUserByID(id);
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    // if (!user) {
+    //   throw new Error("User not found");
+    // }
 
     const usersCollection = await users();
-    return await usersCollection.deleteOne({ _id: user._id });
+    const parsedId = new ObjectId(id)
+
+    console.log('id in delete user', parsedId)
+    return await usersCollection.deleteOne({ _id: parsedId });
   },
 };
 
