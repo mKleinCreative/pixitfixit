@@ -12,11 +12,10 @@ import {
     "Jerell@gpmail.org",
     "Jerel1234!",
     "user",
-    [],
     "Admin",
     [],
     [],
-    "Jerell123456",
+    [],
     "05/01/1999"
   );
   await potholeController.CreatePotHole(

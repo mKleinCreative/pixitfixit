@@ -21,3 +21,6 @@ yarn-error.log*
 /views/keys.js
 node_modules
 
+
+# Local Netlify folder
+.netlify

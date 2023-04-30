@@ -10,16 +10,20 @@ export default function Navbar() {
  const [openRegisterModal, setRegisterModalOpen] = useState(false);
  const [openAdminModal, setAdminModalOpen] = useState(false);
  const [loggedIn, setLoggedIn] = useState(false)
- const [users, setUsers] = useState(false)
+ const [users, setUsers] = useState([])
 
 
- useEffect(async () => {
-    const users = await axios.get("/users");
-    setUsers(users)
+ useEffect(() => {
+   const getUsers = async () => {
+     const users = await axios.get("/userRoutes/users");
+     setUsers(users.data.users)
+     console.log(users.data.users)
+   }
+   getUsers()
  }, [])
 
  const removeUser = (id) => {
-    axios.post(`/deleteUsers/${id}`)
+    axios.post(`/deleteUser/${id}`)
  }
 
 

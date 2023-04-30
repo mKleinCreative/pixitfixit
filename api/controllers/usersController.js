@@ -119,7 +119,7 @@ let exportedMethods = {
     }
 
     // Find user in database
-    const usersCollection = await users;
+    const usersCollection = await users();
     const user = await usersCollection.findOne({ email: email.toLowerCase() });
 
     // Validate user
@@ -147,7 +147,7 @@ let exportedMethods = {
     if (!email || typeof email !== "string" || !emailRegex.test(email)) {
       throw new Error("Email must be a valid email address");
     }
-    const usersCollection = await users;
+    const usersCollection = await users();
     return await usersCollection.findOne({ email: email.toLowerCase() });
   },
 
@@ -164,7 +164,7 @@ let exportedMethods = {
       throw new Error("User not found");
     }
 
-    const usersCollection = await users;
+    const usersCollection = await users();
     return await usersCollection.updateOne(
       { _id: user._id },
       { $set: { role } }
@@ -183,7 +183,7 @@ let exportedMethods = {
       throw new Error("User not found");
     }
 
-    const usersCollection = await users;
+    const usersCollection = await users();
     return await usersCollection.updateOne(
       { _id: user._id },
       { $set: { restricted: true } }
@@ -211,24 +211,24 @@ let exportedMethods = {
     @throws {Error} If no users
     */
     async getAllUsers() {
-      const usersCollection = await users;
-      return await usersCollection.findAll();
+      const usersCollection = await users();
+      return await usersCollection.find({}).toArray();
     },
 
   /**
     
-    Delete a user by their email address.
-    @param {string} email - The user's email address.
-    @throws {Error} If the user is not found.
+    Delete a user by their user id.
+    @param {id} id - The user's id .
+    @throws {Error} If the user id is not found.
     */
-  async deleteUser(email) {
-    const user = await findUser(email);
+  async deleteUser(id) {
+    const user = await findUser(id);
 
     if (!user) {
       throw new Error("User not found");
     }
 
-    const usersCollection = await users;
+    const usersCollection = await users();
     return await usersCollection.deleteOne({ _id: user._id });
   },
 };
