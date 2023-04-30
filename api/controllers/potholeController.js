@@ -1,57 +1,27 @@
-import { pothole } from "../db/collections.js";
+import { pothole, users } from "../db/collections.js";
 import { ObjectId } from "mongodb";
 
 let exportedMethods = {
   async CreatePotHole(
     user_id,
-    status,
     photo_url,
     lat,
     long,
-    assignedTo,
-    zipcode,
-    comments
+    zipcode
   ) {
     if (!user_id || typeof user_id !== "string") {
       throw new Error("Invalid user ID");
     }
 
-    if (!status || typeof status !== "string") {
-      throw new Error("Invalid status");
-    }
-
-    if (!photo_url || typeof photo_url !== "string") {
-      throw new Error("Invalid photo URL");
-    }
-    if (!lat || typeof lat !== "string") {
-      throw new Error("Invalid latitude");
-    }
-
-    if (!long || typeof long !== "string") {
-      throw new Error("Invalid longitude");
-    }
-
-    if (assignedTo && typeof assignedTo !== "string") {
-      throw new Error("Invalid assignedTo");
-    }
-
-    if (!zipcode || typeof zipcode !== "string") {
-      throw new Error("Invalid zipcode");
-    }
-
-    if (comments && !Array.isArray(comments)) {
-      throw new Error("Invalid comments");
-    }
-
     const potholes = await pothole();
     const newPothole = {
       user_id,
-      status: "open",
       photo_url,
       lat,
       long,
-      assignedTo: null,
       zipcode,
+      assignedTo: null,
+      status: "open",
       comments: [],
       created_at: new Date(),
       updated_at: new Date(),
@@ -61,6 +31,16 @@ let exportedMethods = {
     if (insertInfo.insertedCount === 0) {
       throw new Error("Failed to create pothole");
     }
+
+    const allUsers = await users();
+
+    const potholeMaker = await allUsers.findOneAndUpdate({
+      _id: new ObjectId(user_id)
+    }, {
+      $push: {
+        potholesCreated: insertInfo.insertedId
+      }
+    })
 
     return { insertedPothole: true };
   },
@@ -101,9 +81,6 @@ let exportedMethods = {
     return { updatedPotholeStatus: true };
   },
   async GetAllPotholes(zipcode) {
-    if (!zipcode || typeof zipcode !== "string") {
-      throw new Error("Invalid zipcode");
-    }
 
     const potholes = await pothole();
 

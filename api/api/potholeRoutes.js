@@ -23,6 +23,15 @@ router.get("/:id", async (req, res) => {
       res.status(400).json({ error: error.message });
     }
   });
+router.get("/all/:zipcode", async (req, res) => {
+    try {
+      const { zipcode } = req.params;
+      const result = await potholeController.GetAllPotholes(zipcode);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  });
   
   router.patch("/assign/:id", async (req, res) => {
     try {
