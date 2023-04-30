@@ -5,7 +5,6 @@
 ./node_modules
 # production
 /build
-config/dev.js
 # misc
 .DS_Store
 .env.local
