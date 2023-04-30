@@ -93,3 +93,4 @@ const userSchema = new Schema({
     //need to add the date requirements
   },
 });
+module.exports = mongoose.model('Users',userSchema)
