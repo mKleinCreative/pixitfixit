@@ -13,9 +13,7 @@ export default function Navbar() {
 
 
  const removeUser = (id) => {
-    axios.post("/users/delete", {
-        _id: id
-    })
+    axios.post(`/deleteUser/${id}`)
  }
 
 
