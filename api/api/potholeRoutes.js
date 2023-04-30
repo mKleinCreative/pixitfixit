@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    const { _id, user_id, status, photo_url, lat, long, assignedTo, zipcode, comments } = req.body;
-    const result = await potholeController.CreatePotHole(_id, user_id, status, photo_url, lat, long, assignedTo, zipcode, comments);
+    const { user_id, photo_url, lat, long, zipcode } = req.body;
+    const result = await potholeController.CreatePotHole(user_id, photo_url, lat, long, zipcode);
     res.status(201).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });

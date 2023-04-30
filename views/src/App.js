@@ -48,6 +48,15 @@ function App() {
   const handleNewMarker = (e) => {
     const longitude = e.lngLat.lng
     const latitude = e.lngLat.lat
+    const userData = JSON.parse(sessionStorage.getItem("user"))
+    console.log()
+    const createdPothole = await axios.post('/potholeRoutes/create', {
+      user_id: userData._id,
+      photo_url: "https://www.cityworks.com/wp-content/uploads/2020/01/pot-hole-blog.gif",
+      lat: latitude,
+      long: longitude,
+      zipcode: userData.zipcode
+    })
 
     setMarkers(markers => [...markers, {longitude, latitude}])
   };

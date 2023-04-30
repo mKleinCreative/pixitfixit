@@ -46,15 +46,13 @@ let exportedMethods = {
     const potholes = await pothole();
     const newPothole = {
       user_id,
-      status,
+      status: "open",
       photo_url,
-      location: {
-        lat,
-        long,
-      },
-      assignedTo: assignedTo || null,
+      lat,
+      long,
+      assignedTo: null,
       zipcode,
-      comments: comments || [],
+      comments: [],
       created_at: new Date(),
       updated_at: new Date(),
     };
