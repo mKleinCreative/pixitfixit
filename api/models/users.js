@@ -41,3 +41,56 @@
 //   }
 // };
 // export default createUser;
+const mongoose = require("mongodb");
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  zipCode: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    User: {
+      type: String,
+    },
+    Admin: {
+      type: String,
+    },
+    Worker: {
+      type: String,
+    },
+  },
+  comments: {
+    type: [commentid],
+    default: undefined,
+  },
+  assignedPotholes: {
+    type: [potholeid],
+    default: undefined,
+  },
+  restricted: false,
+  potholes: {
+    type: [potholes],
+    default: undefined,
+  },
+  date: {
+    //need to add the date requirements
+  },
+});
+module.exports = mongoose.model('Users',userSchema)

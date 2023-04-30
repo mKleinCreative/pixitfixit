@@ -16,7 +16,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * @param {string} email - The user's email address.
  * @param {string} password - The user's password.
  * @param {string} role - The user's role.
- * @param {string} comment - The user's comment.
+ * @param {string} comments - The user's comment.
  * @param {Array} assignedPotholes - The potholes assigned to the user.
  * @param {Array} potholesCreated - The potholes created by the user.
  * @param {Date} birthday - The user's birthday.
