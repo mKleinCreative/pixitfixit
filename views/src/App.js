@@ -26,7 +26,10 @@ function App() {
 
      useEffect(() => {
       async function setInitialCoordinates() {
-        setZipcode("07871");
+        if (sessionStorage.getItem(JSON.stringify("user"))) {
+          console.log(sessionStorage.getItem(JSON.stringify("user")))
+          setZipcode("07871");
+        }
 
         const { latitude, longitude } = await getCoordinatesFromZipcode(
           zipcode
@@ -74,7 +77,7 @@ function App() {
               mapboxAccessToken={env.MAPBOX_TOKEN}
               onDblClick={handleNewMarker}
             >
-              <Navbar sx={{ backgroundColor: "blue", width: "100%" }} />
+              <Navbar sx={{ backgroundColor: "blue", width: "100%" }} setZipcode={setZipcode}/>
               <GeolocateControl />
               <FullscreenControl />
               <ScaleControl />

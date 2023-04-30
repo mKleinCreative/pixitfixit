@@ -34,7 +34,6 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     await userController.checkUser(email, password);
-    console.log("user data", await userController.findUser(email))
     const loggedInUser = await userController.findUser(email);
     res.status(200).json({ message: "Authenticated successfully", data: loggedInUser });
   } catch (error) {

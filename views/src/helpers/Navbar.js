@@ -3,7 +3,7 @@ import {Button, ButtonGroup, Drawer, Modal, Box, TextField} from "@mui/material"
 import { display } from "@mui/system";
 import axios from 'axios'
 
-export default function Navbar() {
+export default function Navbar(props) {
 
  const [open, setOpen] = useState(true);
  const [openLoginModal, setLoginModalOpen] = useState(true);
@@ -69,6 +69,7 @@ export default function Navbar() {
     console.log("user trying to log in", validUser.data.data)
     if (validUser) {
       sessionStorage.setItem("user", JSON.stringify(validUser.data.data));
+      props.setZipcode(validUser.data.data.zipcode)
       setLoggedIn(true);
       setOpen(false);
     }
