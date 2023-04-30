@@ -20,3 +20,20 @@
 //     throw "this did not work!";
 //   }
 // };
+const mongoose = require('mongodb');
+const Schema = mongoose.Schema
+
+const commentSchema = new Schema({
+    user_id: {
+        type: mongodb.ObjectId,
+        required: true 
+    },
+    Pothole_id: {
+        type: mongodb.ObjectId,
+        required: true
+    }
+    message:
+    PhotoUrl:
+})
+
+module.exports = mongoose.model('Comment',commentSchema)
