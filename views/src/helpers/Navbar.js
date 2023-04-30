@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {Button, ButtonGroup, Drawer, Modal, Box, TextField} from "@mui/material"
 import { display } from "@mui/system";
 import axios from 'axios'
@@ -10,14 +10,9 @@ export default function Navbar() {
  const [openRegisterModal, setRegisterModalOpen] = useState(false);
  const [openAdminModal, setAdminModalOpen] = useState(false);
  const [loggedIn, setLoggedIn] = useState(false)
-
-
- const removeUser = (id) => {
-    axios.post("/users/delete", {
-        _id: id
-    })
- }
-
+ const [userToValidate, setUserToValidate] = useState({})
+ const [newUser, setNewUser] = useState({})
+ const [users, setUsers] = useState([])
 
  const style = {
     position: 'absolute',
@@ -45,32 +40,45 @@ export default function Navbar() {
     p: 4,
   };
 
-  const mockData = [
-    {
-        _id: '1',
-        username: 'tommy',
-    },
-    {
-        _id: '2',
-        username: 'john',
-    },
-    {
-        _id: '3',
-        username: 'amanda',
-    },
-    {
-        _id: '4',
-        username: 'sexton',
-    },
-  ]
-  const handleLogin = (username, password) => {
+ useEffect(() => {
+   const getUsers = async () => {
+     const users = await axios.get("/userRoutes/users");
+     setUsers(users.data.users)
+   }
+   getUsers()
+ }, [])
+
+ const removeUser = async (id) => {
+    await axios.get(`/userRoutes/deleteUser/${id}`)
+    const users = await axios.get('/userRoutes/users')
+    setUsers(users.data.users)
+ }
+
+  const handleRegister = async () => {
+    // TODO: Validate that newuser has all required fields
+    console.log('newUser State',newUser)
+    const newUserCreated = await axios.post("/userRoutes/register", newUser);
+    setUsers([...users, newUserCreated])
+    return newUserCreated
+
+  }
+
+  const handleLogin = async () => {
   // Perform your authentication logic here
-    // if (/* authentication is successful */) {
-      sessionStorage.setItem("token", /* your token here */);
+    const validUser = await axios.post('/userRoutes/login', userToValidate)
+    console.log("user trying to log in", validUser.data.data)
+    if (validUser) {
+      sessionStorage.setItem("user", JSON.stringify(validUser.data.data));
       setLoggedIn(true);
       setOpen(false);
-    // }
+    }
   };
+
+  const handeLogout = async () => {
+    console.log(sessionStorage)
+    sessionStorage.setItem("user", false)
+    setLoggedIn(false);
+  }
 
   return (
     <React.Fragment>
@@ -96,7 +104,7 @@ export default function Navbar() {
           variant="text"
           aria-label="outlined primary button group"
         >
-          { !sessionStorage.user ? (
+          {sessionStorage.user === 'false' ? (
             <>
               <Button onClick={() => setLoginModalOpen(true)}>Login</Button>
               <Modal
@@ -111,11 +119,25 @@ export default function Navbar() {
                       id="standard-basic"
                       label="Email"
                       variant="standard"
+                      value={userToValidate.email}
+                      onChange={(e) =>
+                        setUserToValidate({
+                          ...userToValidate,
+                          email: e.target.value,
+                        })
+                      }
                     />
                     <TextField
                       id="standard-basic"
                       label="Password"
                       variant="standard"
+                      value={userToValidate.password}
+                      onChange={(e) =>
+                        setUserToValidate({
+                          ...userToValidate,
+                          password: e.target.value,
+                        })
+                      }
                     />
                   </form>
                   <Button
@@ -125,6 +147,14 @@ export default function Navbar() {
                     onClick={() => setLoginModalOpen(false)}
                   >
                     close
+                  </Button>
+                  <Button
+                    sx={{ mt: 3 }}
+                    color="primary"
+                    variant="outlined"
+                    onClick={() => handleLogin()}
+                  >
+                    login
                   </Button>
                 </Box>
               </Modal>
@@ -140,34 +170,71 @@ export default function Navbar() {
                 <Box sx={style}>
                   <form>
                     <TextField
+                      value={newUser.firstName}
                       sx={{ mr: 2 }}
                       id="standard-basic"
                       label="First Name"
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, firstName: e.target.value })
+                      }
                       variant="standard"
+                      required
                     />
                     <TextField
+                      value={newUser.lastName}
                       sx={{ mr: 2 }}
                       id="standard-basic"
                       label="Last Name"
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, lastName: e.target.value })
+                      }
                       variant="standard"
+                      required
                     />
                     <TextField
+                      value={newUser.email}
                       sx={{ mr: 2 }}
                       id="standard-basic"
                       label="Email"
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, email: e.target.value })
+                      }
                       variant="standard"
+                      required
                     />
                     <TextField
+                      value={newUser.password}
                       id="standard-basic"
                       label="Password"
                       variant="standard"
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, password: e.target.value })
+                      }
+                      required
                     />
                     <TextField
+                      value={newUser.age}
                       sx={{ mr: 2 }}
                       inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                       type="number"
                       label="Age"
                       variant="standard"
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, age: e.target.value })
+                      }
+                      required
+                    />
+                    <TextField
+                      value={newUser.zipcode}
+                      sx={{ mr: 2 }}
+                      inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                      type="number"
+                      label="Zipcode"
+                      variant="standard"
+                      onChange={(e) =>
+                        setNewUser({ ...newUser, zipcode: e.target.value })
+                      }
+                      required
                     />
                   </form>
                   <Button
@@ -178,59 +245,80 @@ export default function Navbar() {
                   >
                     close
                   </Button>
+                  <Button
+                    sx={{ mt: 3 }}
+                    color="primary"
+                    variant="outlined"
+                    onClick={() => handleRegister()}
+                  >
+                    register
+                  </Button>
+                </Box>
+              </Modal>
+            </>
+          ) : 
+          <>
+            <Button
+              sx={{ mt: 3 }}
+              color="error"
+              variant="outlined"
+              onClick={() => handeLogout()}
+            >
+              logout
+            </Button>
+          </>
+        }
+          {sessionStorage.admin ? (
+            <>
+              <Button onClick={() => setAdminModalOpen(true)}>Admin</Button>
+              <Modal
+                open={openAdminModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={adminStyle}>
+                  <h1>Admin portal</h1>
+                  {users.map((e, i) => {
+                    return (
+                      <div style={{ display: "flex", marginBottom: "1rem" }}>
+                        <p style={{ marginRight: "1rem" }} key={i}>
+                          {`${e.email}: ${e.firstName}, ${e.lastName}`}
+                        </p>
+                        <Button
+                          key={i + 1}
+                          onClick={() => removeUser(e._id)}
+                          color="error"
+                          variant="outlined"
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    );
+                  })}
+                  <Button
+                    sx={{ mt: 3 }}
+                    color="error"
+                    variant="outlined"
+                    onClick={() => setAdminModalOpen(false)}
+                  >
+                    close
+                  </Button>
                 </Box>
               </Modal>
             </>
           ) : null}
-          {sessionStorage.admin ?
-          <>
-          <Button onClick={() => setAdminModalOpen(true)}>Admin</Button>
-          <Modal
-            open={openAdminModal}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={adminStyle}>
-              <h1>Admin portal</h1>
-              {mockData.map((e, i) => {
-                return (
-                  <div style={{ display: "flex", marginBottom: "1rem" }}>
-                    <p style={{ marginRight: "1rem" }} key={i}>
-                      {e.username}
-                    </p>
-                    <Button
-                      key={i + 1}
-                      onClick={() => removeUser(e._id)}
-                      color="error"
-                      variant="outlined"
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                );
-              })}
-              <Button
-                sx={{ mt: 3 }}
-                color="error"
-                variant="outlined"
-                onClick={() => setAdminModalOpen(false)}
-              >
-                close
-              </Button>
-            </Box>
-          </Modal> 
-          </>
-          : null
-          }
         </ButtonGroup>
-      {
-        sessionStorage.user ?
-        <>
-          <Button color="error" variant="outlined" onClick={() => setOpen(false)}>
-            close
-          </Button>
-        </> : null
-      }
+        {sessionStorage.user ? (
+          <>
+            <Button
+              color="error"
+              variant="outlined"
+              onClick={() => setOpen(false)}
+            >
+              close
+            </Button>
+          </>
+        ) : null}
       </Drawer>
     </React.Fragment>
   );

@@ -8,7 +8,8 @@
     "start": "node app.js",
     "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run views\"",
     "views": "cd views && npm run start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd views && npm run build"
   },
   "keywords": [],
   "authors": [
@@ -26,6 +27,7 @@
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.36.2",
     "concurrently": "^8.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",

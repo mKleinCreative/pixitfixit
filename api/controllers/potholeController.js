@@ -39,9 +39,9 @@ let exportedMethods = {
       throw new Error("Invalid zipcode");
     }
 
-    // if (comments && !Array.isArray(comments)) {
-    //   throw new Error("Invalid comments");
-    // } --> Need to refactor!!!
+    if (comments && !Array.isArray(comments)) {
+      throw new Error("Invalid comments");
+    }
 
     const potholes = await pothole();
     const newPothole = {

@@ -26,7 +26,7 @@ function App() {
 
      useEffect(() => {
       async function setInitialCoordinates() {
-        setZipcode("55101");
+        setZipcode("07871");
 
         const { latitude, longitude } = await getCoordinatesFromZipcode(
           zipcode

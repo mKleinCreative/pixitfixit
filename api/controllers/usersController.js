@@ -1,5 +1,6 @@
 import { users } from "../db/collections.js";
 import bcrypt from "bcryptjs/dist/bcrypt.js";
+import { ObjectId } from "mongodb";
 const saltRounds = 10;
 
 const usernameRegex = /^[a-zA-Z0-9]{4,}$/;
@@ -18,7 +19,6 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * @param {string} comments - The user's comment.
  * @param {Array} assignedPotholes - The potholes assigned to the user.
  * @param {Array} potholesCreated - The potholes created by the user.
- * @param {string} username - The user's username.
  * @param {Date} birthday - The user's birthday.
  * @throws {Error} If there is an issue with the input or user creation fails.
  */
@@ -29,14 +29,11 @@ let exportedMethods = {
     lastName,
     email,
     password,
-    role,
-    comments,
-    assignedPotholes,
-    potholesCreated,
-    username,
-    birthday
+    birthday,
+    zipcode
   ) {
     // Validate input
+    console.log('inside createUser');
     if (!email || typeof email !== "string" || !emailRegex.test(email)) {
       throw new Error("Email must be a valid email address");
     }
@@ -47,15 +44,6 @@ let exportedMethods = {
     ) {
       throw new Error(
         "Password must be a non-empty string with at least 6 characters, including one uppercase character, one number, and one special character"
-      );
-    }
-    if (
-      !username ||
-      typeof username !== "string" ||
-      !usernameRegex.test(username)
-    ) {
-      throw new Error(
-        "Username must be a non-empty alphanumeric string with at least 4 characters and no spaces"
       );
     }
 
@@ -78,14 +66,15 @@ let exportedMethods = {
       lastName,
       email: email.toLowerCase(),
       password: hashedPassword,
-      role,
-      comments,
-      assignedPotholes,
-      potholesCreated,
-      username,
+      role: "user",
+      comments: [],
+      assignedPotholes: [],
+      potholesCreated: [],
       birthday,
+      zipcode,
       restricted: false,
     };
+    console.log(`in usersController looking at a ${newUser}`)
 
     // Insert user into database
 
@@ -119,7 +108,7 @@ let exportedMethods = {
     }
 
     // Find user in database
-    const usersCollection = await users;
+    const usersCollection = await users();
     const user = await usersCollection.findOne({ email: email.toLowerCase() });
 
     // Validate user
@@ -147,8 +136,13 @@ let exportedMethods = {
     if (!email || typeof email !== "string" || !emailRegex.test(email)) {
       throw new Error("Email must be a valid email address");
     }
-    const usersCollection = await users;
+    const usersCollection = await users();
     return await usersCollection.findOne({ email: email.toLowerCase() });
+  },
+
+  async findUserByID(id) {
+    const usersCollection = await users();
+    return await usersCollection.findOne({ _id: ObjectId(id) });
   },
 
   /**
@@ -164,7 +158,7 @@ let exportedMethods = {
       throw new Error("User not found");
     }
 
-    const usersCollection = await users;
+    const usersCollection = await users();
     return await usersCollection.updateOne(
       { _id: user._id },
       { $set: { role } }
@@ -183,7 +177,7 @@ let exportedMethods = {
       throw new Error("User not found");
     }
 
-    const usersCollection = await users;
+    const usersCollection = await users();
     return await usersCollection.updateOne(
       { _id: user._id },
       { $set: { restricted: true } }
@@ -207,19 +201,32 @@ let exportedMethods = {
 
   /**
     
-    Delete a user by their email address.
-    @param {string} email - The user's email address.
-    @throws {Error} If the user is not found.
+    Get users
+    @throws {Error} If no users
     */
-  async deleteUser(email) {
-    const user = await findUser(email);
+    async getAllUsers() {
+      const usersCollection = await users();
+      return await usersCollection.find({}).toArray();
+    },
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+  /**
+    
+    Delete a user by their user id.
+    @param {id} id - The user's id .
+    @throws {Error} If the user id is not found.
+    */
+  async deleteUser(id) {
+    // const user = await findUserByID(id);
 
-    const usersCollection = await users;
-    return await usersCollection.deleteOne({ _id: user._id });
+    // if (!user) {
+    //   throw new Error("User not found");
+    // }
+
+    const usersCollection = await users();
+    const parsedId = new ObjectId(id)
+
+    console.log('id in delete user', parsedId)
+    return await usersCollection.deleteOne({ _id: parsedId });
   },
 };
 
