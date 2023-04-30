@@ -1,4 +1,5 @@
 import { users } from "../db/collections.js";
+import bcrypt from "bcryptjs/dist/bcrypt.js";
 const saltRounds = 10;
 
 const usernameRegex = /^[a-zA-Z0-9]{4,}$/;
@@ -59,7 +60,7 @@ let exportedMethods = {
     }
 
     // Check for existing user
-    const usersCollection = await users;
+    const usersCollection = await users();
     const userExists = await usersCollection.findOne({
       email: email.toLowerCase(),
     });
@@ -87,6 +88,7 @@ let exportedMethods = {
     };
 
     // Insert user into database
+
     const insertInfo = await usersCollection.insertOne(newUser);
     if (insertInfo.insertedCount === 0) {
       throw new Error("Failed to create user");

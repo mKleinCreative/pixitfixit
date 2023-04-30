@@ -1,17 +1,16 @@
-import createUser from "./users.js";
+import exportedMethods from "../controllers/usersController.js";
 // import createPothole from "./potholes.js";
 
 (async () => {
-  await createUser(
+  await exportedMethods.createUser(
     "Jerell",
     "Mendoza",
-    "Jerell@gpmail.ord",
-    "08901",
-    "P@ssw0rd",
+    "Jerell@gpmail.org",
+    "Jerel1234!",
+    "user",
+    "This pothole is too much",
     "Admin",
     "6441e1ed23c3324645e81114",
-    "6441e1ed23c3324645e81114",
-    "true",
     "6441e1ed23c3324645e81114",
     "Jerell123456",
     "05/01/1999"
