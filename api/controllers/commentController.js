@@ -90,14 +90,18 @@ let exportedMethods = {
     if (!user_id || typeof user_id !== "string") throw "this user is invalid";
 
     const commentcollection = await comment();
-    const parsedCommentID = ObjectId(user_id);
+
+    const parsedCommentID = new ObjectId(user_id);
 
     const findUserComment = await commentcollection.find(
       { user_id: parsedCommentID },
       { projection: { _id: 1, user_id: 1, message: 1, PhotoUrL: 1 } }
-    );
+    ).toArray();
     if (findUserComment.acknowledged === false)
       throw `${parsedCommentID} has no comments`;
+
+      return findUserComment;
+
   },
   async DeleteComment(comment_id, user_id) {
     // by comment id

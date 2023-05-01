@@ -27,7 +27,7 @@ router.get("/comment/pothole/:pothole_id", async (req, res) => {
     res.status(400).json({ error: error });
   }
 });
-router.get("/comment/:id", async (req, res) => {
+router.get("/comment/:user_id", async (req, res) => {
   try {
     const { user_id } = req.params;
     const comment = await commentController.GetAllCommentsByUser(user_id);
