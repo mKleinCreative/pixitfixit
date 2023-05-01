@@ -19,6 +19,7 @@ function App() {
   const [markers, setMarkers] = useState([]);
   const [showPopup, setShowPopup] = useState(false)
   const [zipcode, setZipcode] = useState(null)
+  const [hasActiveUser, setHasActiveUser] = useState(false)
   const [formData, setFormData] = useState(null);
   const [markerPosition, setMarkerPosition] = useState(null);
   const [viewport, setViewport] = useState({
@@ -45,7 +46,7 @@ function App() {
       }
 
       setInitialCoordinates();
-    }, [zipcode]);
+    }, [hasActiveUser]);
 
     useEffect(() => {
       async function getMarkersFromUserZip() {
@@ -60,7 +61,7 @@ function App() {
         setMarkers(markersArray)
       }
       getMarkersFromUserZip()
-    }, [zipcode])
+    }, [hasActiveUser])
     
 
   const handleNewMarker = async (e) => {
@@ -103,7 +104,11 @@ function App() {
               mapboxAccessToken={env.MAPBOX_TOKEN}
               onDblClick={handleNewMarker}
             >
-              <Navbar sx={{ backgroundColor: "blue", width: "100%" }} setZipcode={setZipcode}/>
+              <Navbar
+                sx={{ backgroundColor: "blue", width: "100%" }}
+                setZipcode={setZipcode}
+                setHasActiveUser={setHasActiveUser}
+              />
               <GeolocateControl />
               <FullscreenControl />
               <ScaleControl />

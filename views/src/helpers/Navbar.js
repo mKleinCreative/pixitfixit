@@ -70,6 +70,7 @@ export default function Navbar(props) {
     if (validUser) {
       sessionStorage.setItem("user", JSON.stringify(validUser.data.data));
       props.setZipcode(validUser.data.data.zipcode)
+      props.setHasActiveUser(true)
       setLoggedIn(true);
       setOpen(false);
     }
@@ -78,6 +79,7 @@ export default function Navbar(props) {
   const handeLogout = async () => {
     console.log(sessionStorage)
     sessionStorage.setItem("user", false)
+    props.setHasActiveUser(false);
     setLoggedIn(false);
   }
 
