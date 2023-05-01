@@ -91,6 +91,9 @@ const userSchema = new Schema({
   },
   date: {
     //need to add the date requirements
+    type: Date,
+    default: Date.now,
+    required: true,
   },
 });
 module.exports = mongoose.model('Users',userSchema)
