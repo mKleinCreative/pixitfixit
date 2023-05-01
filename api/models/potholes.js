@@ -30,3 +30,48 @@
 //   }
 // };
 // export default createPothole;
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const potholeSchema = new Schema({
+    _id: {
+        type: mongodb.ObjectId,
+        required: true,
+        unique: true
+    },
+    user_id: {
+        type: mongodb.ObjectId,
+        required: true 
+    },
+    status: {
+        type: String,
+        required: true
+    },
+    photo_url: {
+        type: String,
+        required: true
+    },
+    lat: {
+        type: Number,
+        required: true
+    },
+    long: {
+        type: Number,
+        required: true
+    },
+    assignedTo: {
+        type: mongodb.ObjectId,
+        required: true
+    },
+    zipcode: {
+        type: String,
+        required: true
+    },
+    comments: {
+        type: Array,
+        required: true
+    }
+});
+
+module.exports = mongoose.model('Pothole', potholeSchema);
