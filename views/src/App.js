@@ -27,6 +27,7 @@ function App() {
   const [formOpen, setFormOpen] = useState(true);
   const [imgUrl, setImgUrl] = useState("");
   const [markerPosition, setMarkerPosition] = useState(null);
+  const [comments, setComments] = useState([]);
   const [viewport, setViewport] = useState({
     lng: 0,
     lat: 0,
@@ -67,8 +68,9 @@ function App() {
       getMarkersFromUserZip()
     }, [hasActiveUser])
     
-    const getComments = async () => {
-      console.log('hi')
+    const getComments = async (id) => {
+      const comments = axios.get(`/comment/pothole/${id}`)
+      setComments(comments);
     }
 
   const handleNewMarker = async (e) => {
@@ -156,6 +158,7 @@ function App() {
                           open={handleShowPopup}
                           onClose={handleShowPopup}
                           comments={getComments}
+                          markerInfo={m}
                         />
                       )}
                     </Marker>
