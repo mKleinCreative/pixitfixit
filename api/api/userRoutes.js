@@ -41,9 +41,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/findUser/", async (req, res) => {
+router.get("/findUser/:email", async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email } = req.params;
     const user = await userController.findUser(email);
     res.status(200).json(user);
     return user

@@ -4,7 +4,7 @@ import { commentController } from "../controllers/index.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/create", async (req, res) => {
   try {
     const { user_id, pothole_id, message, PhotoUrl } = req.body;
     const createdcomment = await commentController.CreateComment(

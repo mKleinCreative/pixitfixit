@@ -39,7 +39,7 @@ let exportedMethods = {
 
     const useridCollection = usercollections.updateOne(
       { _id: parsedId },
-      { $push: { comment: commentId } }
+      { $push: { comments: commentId } }
     );
 
     const potholeidCollection = potHoleCollections.updateOne(
