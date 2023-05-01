@@ -157,7 +157,7 @@ function App() {
                         <MarkerDialog
                           open={handleShowPopup}
                           onClose={handleShowPopup}
-                          comments={getComments}
+                          comments={comments}
                           markerInfo={m}
                         />
                       )}

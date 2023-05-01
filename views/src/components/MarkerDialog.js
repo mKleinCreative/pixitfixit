@@ -15,9 +15,9 @@ const MarkerDialog = (props) => {
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Marker Info</DialogTitle>
       <DialogContent>
-          {/* {props.comments.map((comment) => {
+           {props.comments.map((comment) => {
             return <p>{comment}</p>
-          })} */}
+          })} 
           "hi"
       </DialogContent>
       <DialogActions>
