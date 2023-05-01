@@ -73,6 +73,13 @@ function App() {
       setComments(comments);
     }
 
+    const addComment = async (comment) => {
+      const payload = {
+        comment
+      }
+      return await axios.post("/create", payload)
+    }
+
   const handleNewMarker = async (e) => {
     const longitude = e.lngLat.lng
     const latitude = e.lngLat.lat
