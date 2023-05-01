@@ -158,6 +158,7 @@ function App() {
                           open={handleShowPopup}
                           onClose={handleShowPopup}
                           comments={comments}
+                          getComments={getComments}
                           markerInfo={m}
                         />
                       )}

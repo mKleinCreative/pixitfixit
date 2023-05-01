@@ -9,7 +9,7 @@ import {
 const MarkerDialog = (props) => {
   const { open, onClose } = props;
 
-  getComments(props.markerInfo._id);
+  props.getComments(props.markerInfo._id);
 
   return (
     <Dialog open={open} onClose={onClose}>
