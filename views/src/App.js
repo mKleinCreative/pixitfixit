@@ -24,9 +24,9 @@ function App() {
   const [showPopup, setShowPopup] = useState(false)
   const [zipcode, setZipcode] = useState(null)
   const [hasActiveUser, setHasActiveUser] = useState(false)
-  const [formOpen, setFormOpen] = useState(true);
-  const [imgUrlToUpload, setImgUrlToUpload] = useState("");
-  const [markerPosition, setMarkerPosition] = useState(null);
+  // const [formOpen, setFormOpen] = useState(true);
+  // const [imgUrlToUpload, setImgUrlToUpload] = useState("");
+  // const [markerPosition, setMarkerPosition] = useState(null);
   const [comments, setComments] = useState([]);
   const [viewport, setViewport] = useState({
     lng: 0,
@@ -52,7 +52,7 @@ function App() {
       }
 
       setInitialCoordinates();
-    }, [hasActiveUser]);
+    }, [zipcode]);
 
     useEffect(() => {
       async function getMarkersFromUserZip() {
@@ -89,13 +89,13 @@ function App() {
 
     const createdPothole = await axios.post('/potholeRoutes/create', {
       user_id: userData._id,
-      photo_url: imgUrlToUpload,
+      photo_url: "https://www.cityworks.com/wp-content/uploads/2020/01/pot-hole-blog.gif",
       lat: latitude,
       long: longitude,
       zipcode: userData.zipcode
     })
 
-    setFormOpen(false);
+    // setFormOpen(false);
     setMarkers(markers => [...markers, {longitude, latitude}])
   };
 
@@ -123,7 +123,7 @@ function App() {
       >
         <Grid container spacing={2} gridTemplateColumns="repeat(12, 1fr)">
           <Grid item xs={12} md={8} lg={10}>
-            <Modal
+            {/* <Modal
               open={formOpen}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
@@ -139,7 +139,7 @@ function App() {
                   close
               </Button>
             </Box>
-            </Modal>
+            </Modal> */}
             <InteractiveMap
               item
               doubleClickZoom={false}
@@ -147,7 +147,7 @@ function App() {
               style={{ width: "100vw", height: "100vh" }}
               mapStyle="mapbox://styles/mapbox/streets-v11"
               mapboxAccessToken={env.MAPBOX_TOKEN}
-              onDblClick={() => setFormOpen(true)}
+              onDblClick={handleNewMarker}
             >
               <Navbar
                 sx={{ backgroundColor: "blue", width: "100%" }}
