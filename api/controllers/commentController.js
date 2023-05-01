@@ -78,8 +78,11 @@ let exportedMethods = {
       const allPotholeComments = allPotholes
         .map((pothole) => pothole.comments)
         .flat();
-
-      return allPotholeComments;
+      const commentCollection = await comment();
+      const totalComment = await commentCollection
+        .find({ _id: { $in: allPotholeComments } })
+        .toArray();
+      return totalComment;
     } catch (error) {
       console.log(error);
       throw error;
