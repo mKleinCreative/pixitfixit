@@ -52,6 +52,17 @@ router.get("/findUser/", async (req, res) => {
   }
 });
 
+router.post("/updateUser", async (req, res) => {
+  try {
+    const { id } = req.body;
+    const user = await userController.updateUser(id);
+    res.status(200).json(user);
+    return user
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+});
+
 router.patch("/changePermissions/", async (req, res) => {
   try {
     const { email, role } = req.body;
