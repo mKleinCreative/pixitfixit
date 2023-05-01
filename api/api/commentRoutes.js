@@ -18,7 +18,7 @@ router.post("/create", async (req, res) => {
     res.status(400).json({ error: "this comment was not able to be created!" });
   }
 });
-router.get("/comment/pothole/:id", async (req, res) => {
+router.get("/comment/pothole/:pothole_id", async (req, res) => {
   try {
     const { pothole_id } = req.params;
     const allpotholeComments = await commentController.GetAllPotholeComments(
@@ -26,10 +26,10 @@ router.get("/comment/pothole/:id", async (req, res) => {
     );
     res.status(201).json(allpotholeComments);
   } catch (error) {
-    res.status(400).json({ error: "this pothole has no comments!" });
+    res.status(400).json({ error: error });
   }
 });
-router.get("/comment/:id", async (req, res) => {
+router.get("/comment/:user_id", async (req, res) => {
   try {
     const { user_id } = req.params;
     const comment = await commentController.GetAllCommentsByUser(user_id);
@@ -39,17 +39,23 @@ router.get("/comment/:id", async (req, res) => {
   }
 });
 
-router.delete("/comment/pothole/delete", async (req, res) => {
-  try {
-    const { comment_id, user_id } = req.params;
-    const deletedComment = await commentController.DeleteComment(
-      comment_id,
-      user_id
-    );
-    res.status(201).json(deletedComment);
-  } catch (error) {
-    res.status(400).json({ error: "this comment was not able to be deleted!" });
+router.delete(
+  "/comment/pothole/:user_id/:pothole_id/:comment_id",
+  async (req, res) => {
+    try {
+      const { user_id, pothole_id, comment_id } = req.params;
+      const deletedComment = await commentController.DeleteComment(
+        user_id,
+        pothole_id,
+        comment_id
+      );
+      res.status(201).json(deletedComment);
+    } catch (error) {
+      res
+        .status(400)
+        .json({ error: "this comment was not able to be deleted!" });
+    }
   }
-});
+);
 
 export default router;

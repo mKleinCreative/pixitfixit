@@ -31,9 +31,15 @@ const commentSchema = new Schema({
     Pothole_id: {
         type: mongodb.ObjectId,
         required: true
+    },
+    message: {
+        type: String,
+        required: true
+    },
+    PhotoUrl: {
+        type: String,
+        required: true
     }
-    message:
-    PhotoUrl:
-})
+});
 
-module.exports = mongoose.model('Comment',commentSchema)
+module.exports = mongoose.model('Comment', commentSchema);
