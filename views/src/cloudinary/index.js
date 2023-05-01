@@ -2,7 +2,6 @@ import React from "react";
 class ImageUpload extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
   }
   showWidget = () => {
     let widget = window.cloudinary.createUploadWidget(

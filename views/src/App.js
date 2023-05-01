@@ -61,7 +61,8 @@ function App() {
         markersInZipcode.data.forEach((marker) => {
           let latitude = marker.lat
           let longitude = marker.long
-          markersArray.push({latitude, longitude})
+          let _id = marker._id
+          markersArray.push({latitude, longitude, _id})
         })
         setMarkers(markersArray)
       }
@@ -69,7 +70,7 @@ function App() {
     }, [hasActiveUser])
     
     const getComments = async (id) => {
-      const comments = axios.get(`/comment/pothole/${id}`)
+      const comments = await axios.get(`/comment/pothole/${id}`)
       setComments(comments);
     }
 
