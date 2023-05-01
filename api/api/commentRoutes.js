@@ -18,15 +18,13 @@ router.post("/create", async (req, res) => {
     res.status(400).json({ error: "this comment was not able to be created!" });
   }
 });
-router.get("/comment/pothole/:id", async (req, res) => {
+router.get("/comment/pothole/:pothole_id", async (req, res) => {
   try {
     const { pothole_id } = req.params;
-    const allpotholeComments = await commentController.GetAllPotholeComments(
-      pothole_id
-    );
+    const allpotholeComments = await commentController.GetAllPotholeComments(pothole_id);
     res.status(201).json(allpotholeComments);
   } catch (error) {
-    res.status(400).json({ error: "this pothole has no comments!" });
+    res.status(400).json({ error: error });
   }
 });
 router.get("/comment/:id", async (req, res) => {

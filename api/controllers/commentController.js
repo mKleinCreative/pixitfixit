@@ -60,17 +60,18 @@ let exportedMethods = {
     return newComment;
   },
   async GetAllPotholeComments(pothole_id) {
+
     if (!pothole_id || typeof pothole_id !== "string")
       throw "this is not a valid potholeId!";
 
-    const parsedPotholeID = ObjectId(pothole_id);
-
-    const potholes = await poteHolecollection();
+    const parsedPotholeID = new  ObjectId(pothole_id);
+    const potholes = await pothole();
 
     try {
-      const allPotholes = await potholes
-        .find({ _id: parsedPotholeID }, { projection: { comments: 1 } })
-        .toArray();
+
+      const allPotholes = await potholes.find({ _id: parsedPotholeID }).toArray();
+
+      console.log(allPotholes)
 
       if (!allPotholes) throw "there are no comments for this pothole!";
 
@@ -80,7 +81,8 @@ let exportedMethods = {
 
       return allPotholeComments;
     } catch (error) {
-      throw "Not able to retreieve pothole comment!";
+      console.log(error)
+      throw error;
     }
   },
   async GetAllCommentsByUser(user_id) {
@@ -106,7 +108,7 @@ let exportedMethods = {
 
     const commentcollection = await comment();
     const userCollection = await users();
-    const poteHolecollection = await pothole();
+    const potHolecollection = await pothole();
 
     const parsedUserid = ObjectId(user_id);
     const parsedCommentid = ObjectId(comment_id);
@@ -116,7 +118,7 @@ let exportedMethods = {
       { $pull: { comment: parsedCommentid } }
     );
 
-    const potholeid = await poteHolecollection.updateOne(
+    const potholeid = await potHolecollection.updateOne(
       { _id: parsedUserid },
       { $pull: { comments: parsedCommentid } }
     );
