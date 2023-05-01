@@ -6,23 +6,20 @@ import {
     Button
 } from '@mui/material'
 
-const MarkerDialog = (props) => {
-  const { open, onClose } = props;
-
-  console.log("shid",props.markerInfo)
-  props.getComments(props.markerInfo._id);
-
-
+const MarkerDialog = async (props) => {
+  // const { open, onClose } = props;
+  const comments = await props.getComments(props.markerInfo._id);
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={props.open} onClose={props.onClose}>
       <DialogTitle>Marker Info</DialogTitle>
+      <img src={props.markerInfo.imgUrl}/>
       <DialogContent>
-           {props.comments?.map((comment) => {
+           {props.comments.map((comment) => {
             return <p>{comment}</p>
           })} 
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Close</Button>
+        <Button onClick={props.onClose}>Close</Button>
       </DialogActions>
     </Dialog>
   );

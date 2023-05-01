@@ -25,7 +25,7 @@ function App() {
   const [zipcode, setZipcode] = useState(null)
   const [hasActiveUser, setHasActiveUser] = useState(false)
   const [formOpen, setFormOpen] = useState(true);
-  const [imgUrl, setImgUrl] = useState("");
+  const [imgUrlToUpload, setImgUrlToUpload] = useState("");
   const [markerPosition, setMarkerPosition] = useState(null);
   const [comments, setComments] = useState([]);
   const [viewport, setViewport] = useState({
@@ -62,7 +62,8 @@ function App() {
           let latitude = marker.lat
           let longitude = marker.long
           let _id = marker._id
-          markersArray.push({latitude, longitude, _id})
+          let imgUrl = marker.photo_url
+          markersArray.push({latitude, longitude, _id, imgUrl})
         })
         setMarkers(markersArray)
       }
@@ -70,7 +71,7 @@ function App() {
     }, [hasActiveUser])
     
     const getComments = async (id) => {
-      const comments = await axios.get(`/comment/pothole/${id}`)
+      const comments = await axios.get(`/commentRoutes/comment/pothole/${id}`)
       setComments(comments);
     }
 
@@ -78,7 +79,7 @@ function App() {
       const payload = {
         comment
       }
-      return await axios.post("/create", payload)
+      return await axios.post("/commentRoutes/create", payload)
     }
 
   const handleNewMarker = async (e) => {
@@ -88,7 +89,7 @@ function App() {
 
     const createdPothole = await axios.post('/potholeRoutes/create', {
       user_id: userData._id,
-      photo_url: imgUrl,
+      photo_url: imgUrlToUpload,
       lat: latitude,
       long: longitude,
       zipcode: userData.zipcode
@@ -128,7 +129,7 @@ function App() {
               aria-describedby="modal-modal-description"
             >
               <Box sx={style}>
-                <MarkerForm onSubmit={handleNewMarker} setImgUrl={setImgUrl} />
+                <MarkerForm onSubmit={handleNewMarker} setImgUrl={setImgUrlToUpload} />
                 <Button
                   sx={{ mt: 3 }}
                   color="error"

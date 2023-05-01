@@ -22,7 +22,7 @@ router.get("/comment/pothole/:pothole_id", async (req, res) => {
   try {
     const { pothole_id } = req.params;
     const allpotholeComments = await commentController.GetAllPotholeComments(
-      pothole_id
+      new ObjectId(pothole_id)
     );
     res.status(201).json(allpotholeComments);
   } catch (error) {

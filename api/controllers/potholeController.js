@@ -186,7 +186,7 @@ let exportedMethods = {
 
       const allComments = allPotholes.map((pothole) => pothole.comments).flat();
 
-      return allComments;
+      return allComments.length !== 0 ? allComments : "No comments yet."
     } catch (error) {
       throw new Error("Error retrieving pothole comments");
     }
